@@ -197,6 +197,8 @@ struct numeric_typedef_base {
 
 private:
   R& self_as_derived() noexcept { return *static_cast<R*>(this); }
+protected:
+  ~numeric_typedef_base() = default;
 };
 
 ///
@@ -233,6 +235,8 @@ struct numeric_typedef : numeric_typedef_base<V,R,S>
 {
   using base = numeric_typedef_base<V,R,S>;
   using base::base;
+protected:
+  ~numeric_typedef() = default;
 };
 
 /// @}
