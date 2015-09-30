@@ -297,7 +297,7 @@ struct binary_operator
 {
   //
   // Inheriting a function with the same name from different base classes is
-  // ambiguous (ISO/IEC 14882 §10.2/6.  Work around this by pulling the
+  // ambiguous (ISO/IEC 14882 §10.2/6).  Work around this by pulling the
   // declarations into the derived class.
   //
   using overload_selector_t<OPN,RT,commutative,P1,P2,I1,I2,OPS>::type_1::func;
