@@ -55,10 +55,10 @@ namespace opaque {
 /// details.  The list of template arguments for these classes is:
 ///  -# return type
 ///  -# commutative (bool)
-///  -# type of left argument
-///  -# type of right argument
-///  -# type to convert left argument to
-///  -# type to convert right argument to
+///  -# type of left operand
+///  -# type of right operand
+///  -# type to convert left operand to
+///  -# type to convert right operand to
 ///
 /// If you do not desire certain standard numeric operations, simply delete
 /// them in your subclass.  (Note that it is simpler to delete an unwanted
@@ -218,7 +218,7 @@ protected:
 /// Template arguments for numeric_typedef:
 ///  -# V : The underlying type holding the value
 ///  -# R : The result type, your subclass
-///  -# S : The right-hand argument type for shift operations
+///  -# S : The right-hand operand type for shift operations
 ///
 template <typename V, typename R, typename S = unsigned>
 struct numeric_typedef : numeric_typedef_base<V,R,S>

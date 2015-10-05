@@ -38,6 +38,7 @@ example
 #
 [real_executables]
 example/demo_numeric_typedef.cpp
+example/tutorial.cpp
 
 #
 # Directory trees containing unit test source files
