@@ -196,7 +196,11 @@ struct numeric_typedef_base {
   }
 
 private:
-  R& self_as_derived() noexcept { return *static_cast<R*>(this); }
+  R& self_as_derived() noexcept {
+    static_assert(std::is_base_of<self_t, result_t>::value,
+        "Template type R must be derived from numeric_typedef_base");
+    return *static_cast<R*>(this);
+  }
 protected:
   ~numeric_typedef_base() = default;
 };
