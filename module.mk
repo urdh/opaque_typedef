@@ -28,7 +28,7 @@
 #
 
 NAME = opaque
-VERSION = 1.0.0
+VERSION = 1.0.1
 
 COMMON += -std=c++11 -pedantic
 COMMON += -Wall -Wextra -Wformat=2 -Winit-self -Wmissing-include-dirs
