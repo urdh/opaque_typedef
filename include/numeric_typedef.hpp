@@ -66,12 +66,13 @@ namespace opaque {
 /// operation than to supply a missing one that is desired.)
 ///
 template <typename V, typename R, typename S = unsigned>
-struct numeric_typedef_base : data<V, R> {
+struct numeric_typedef_base : data<V,R> {
+  using base = data<V,R>;
+  using base::value;
   typedef V value_t;
   typedef R result_t;
   typedef S shift_t;
   typedef numeric_typedef_base<V,R,S> self_t;
-  using data<V, R>::value;
 
   result_t& operator*=(const result_t& peer)
     noexcept(noexcept( value *= peer.value )) {
@@ -186,7 +187,6 @@ struct numeric_typedef_base : data<V, R> {
     return             static_cast<bool>(value); }
 
 
-  using base = data<value_t, result_t>;
   using base::base;
   explicit constexpr numeric_typedef_base() = default;
   numeric_typedef_base(const numeric_typedef_base& ) = default;
