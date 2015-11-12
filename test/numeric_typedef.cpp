@@ -53,6 +53,64 @@ struct safe_int : public numeric_typedef<int, safe_int> {
   using base::base;
 };
 
+SUITE(traits) {
+  TEST(size) {
+    CHECK_EQUAL(sizeof(int), sizeof(safe_int));
+  }
+  TEST(primary) {
+    CHECK_EQUAL(false, std::is_void<safe_int>::value);
+    CHECK_EQUAL(false, std::is_integral<safe_int>::value);
+    CHECK_EQUAL(false, std::is_floating_point<safe_int>::value);
+    CHECK_EQUAL(false, std::is_array<safe_int>::value);
+    CHECK_EQUAL(false, std::is_pointer<safe_int>::value);
+    CHECK_EQUAL(false, std::is_lvalue_reference<safe_int>::value);
+    CHECK_EQUAL(false, std::is_rvalue_reference<safe_int>::value);
+    CHECK_EQUAL(false, std::is_member_object_pointer<safe_int>::value);
+    CHECK_EQUAL(false, std::is_member_function_pointer<safe_int>::value);
+    CHECK_EQUAL(false, std::is_enum<safe_int>::value);
+    CHECK_EQUAL(false, std::is_union<safe_int>::value);
+    CHECK_EQUAL(true , std::is_class<safe_int>::value);
+    CHECK_EQUAL(false, std::is_function<safe_int>::value);
+  }
+  TEST(composite) {
+    CHECK_EQUAL(false, std::is_reference<safe_int>::value);
+    CHECK_EQUAL(false, std::is_arithmetic<safe_int>::value);
+    CHECK_EQUAL(false, std::is_fundamental<safe_int>::value);
+    CHECK_EQUAL(true , std::is_object<safe_int>::value);
+    CHECK_EQUAL(false, std::is_scalar<safe_int>::value);
+    CHECK_EQUAL(true , std::is_compound<safe_int>::value);
+    CHECK_EQUAL(false, std::is_member_pointer<safe_int>::value);
+  }
+  TEST(properties) {
+    CHECK_EQUAL(false, std::is_const<safe_int>::value);
+    CHECK_EQUAL(false, std::is_volatile<safe_int>::value);
+    CHECK_EQUAL(true , std::is_trivial<safe_int>::value);
+  //CHECK_EQUAL(true , std::is_trivially_copyable<safe_int>::value);
+    CHECK_EQUAL(true , std::is_standard_layout<safe_int>::value);
+    CHECK_EQUAL(true , std::is_pod<safe_int>::value);
+    CHECK_EQUAL(true , std::is_literal_type<safe_int>::value);
+    CHECK_EQUAL(false, std::is_empty<safe_int>::value);
+    CHECK_EQUAL(false, std::is_polymorphic<safe_int>::value);
+    CHECK_EQUAL(false, std::is_abstract<safe_int>::value);
+    CHECK_EQUAL(false, std::is_signed<safe_int>::value);
+    CHECK_EQUAL(false, std::is_unsigned<safe_int>::value);
+  //CHECK_EQUAL(true , std::is_trivially_constructible<safe_int, int>::value);
+  //CHECK_EQUAL(true , std::is_trivially_copy_constructible<safe_int>::value);
+  //CHECK_EQUAL(true , std::is_trivially_move_constructible<safe_int>::value);
+  //CHECK_EQUAL(true , std::is_trivially_copy_assignable<safe_int>::value);
+  //CHECK_EQUAL(true , std::is_trivially_move_assignable<safe_int>::value);
+    CHECK_EQUAL(true , std::is_trivially_destructible<safe_int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_constructible<safe_int, int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_default_constructible<safe_int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_copy_constructible<safe_int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_move_constructible<safe_int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_copy_assignable<safe_int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_move_assignable<safe_int>::value);
+    CHECK_EQUAL(true , std::is_nothrow_destructible<safe_int>::value);
+    CHECK_EQUAL(false, std::has_virtual_destructor<safe_int>::value);
+  }
+}
+
 SUITE(creation) {
 
   TEST(ctor) {

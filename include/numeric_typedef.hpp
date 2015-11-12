@@ -29,6 +29,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 #include "binop/binop_inherit.hpp"
+#include "data.hpp"
 #include <type_traits>
 #include <utility>
 
@@ -65,82 +66,73 @@ namespace opaque {
 /// operation than to supply a missing one that is desired.)
 ///
 template <typename V, typename R, typename S = unsigned>
-struct numeric_typedef_base {
-  V value;     ///< The underlying value
+struct numeric_typedef_base : data<V, R> {
   typedef V value_t;
   typedef R result_t;
   typedef S shift_t;
   typedef numeric_typedef_base<V,R,S> self_t;
-
-  explicit constexpr numeric_typedef_base() = default;
-  explicit constexpr numeric_typedef_base(value_t v)
-    noexcept(std::is_nothrow_move_constructible<value_t>::value)
-    : value(std::move(v)) { }
-  numeric_typedef_base(const numeric_typedef_base& ) = default;
-  numeric_typedef_base(      numeric_typedef_base&&) = default;
-  numeric_typedef_base& operator=(const numeric_typedef_base& ) = default;
-  numeric_typedef_base& operator=(      numeric_typedef_base&&) = default;
+  using data<V, R>::value;
 
   result_t& operator*=(const result_t& peer)
     noexcept(noexcept( value *= peer.value )) {
                        value *= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator/=(const result_t& peer)
     noexcept(noexcept( value /= peer.value )) {
                        value /= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator%=(const result_t& peer)
     noexcept(noexcept( value %= peer.value )) {
                        value %= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator+=(const result_t& peer)
     noexcept(noexcept( value += peer.value )) {
                        value += peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator-=(const result_t& peer)
     noexcept(noexcept( value -= peer.value )) {
                        value -= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator<<=(const shift_t& count)
     noexcept(noexcept( value <<= count )) {
                        value <<= count;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator>>=(const shift_t& count)
     noexcept(noexcept( value >>= count )) {
                        value >>= count;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator&=(const result_t& peer)
     noexcept(noexcept( value &= peer.value )) {
                        value &= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator^=(const result_t& peer)
     noexcept(noexcept( value ^= peer.value )) {
                        value ^= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator|=(const result_t& peer)
     noexcept(noexcept( value |= peer.value )) {
                        value |= peer.value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
 
   result_t& operator++()
     noexcept(noexcept( ++value )) {
                        ++value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t& operator--()
     noexcept(noexcept( --value )) {
                        --value;
-    return self_as_derived(); }
+    return this->downcast(); }
 
   result_t operator++(int) noexcept(noexcept(
         std::declval<self_t&>().operator++()) and
@@ -193,18 +185,14 @@ struct numeric_typedef_base {
     noexcept(noexcept( static_cast<bool>(value) )) {
     return             static_cast<bool>(value); }
 
-  /// Copy the underlying value
-  explicit constexpr operator value_t() const
-    noexcept(std::is_nothrow_copy_constructible<value_t>::value) {
-    return value;
-  }
 
-private:
-  R& self_as_derived() noexcept {
-    static_assert(std::is_base_of<self_t, result_t>::value,
-        "Template type R must be derived from numeric_typedef_base");
-    return *static_cast<R*>(this);
-  }
+  using base = data<value_t, result_t>;
+  using base::base;
+  explicit constexpr numeric_typedef_base() = default;
+  numeric_typedef_base(const numeric_typedef_base& ) = default;
+  numeric_typedef_base(      numeric_typedef_base&&) = default;
+  numeric_typedef_base& operator=(const numeric_typedef_base& ) = default;
+  numeric_typedef_base& operator=(      numeric_typedef_base&&) = default;
 protected:
   ~numeric_typedef_base() = default;
 };
