@@ -76,6 +76,10 @@ struct numeric_typedef_base {
   explicit constexpr numeric_typedef_base(value_t v)
     noexcept(std::is_nothrow_move_constructible<value_t>::value)
     : value(std::move(v)) { }
+  numeric_typedef_base(const numeric_typedef_base& ) = default;
+  numeric_typedef_base(      numeric_typedef_base&&) = default;
+  numeric_typedef_base& operator=(const numeric_typedef_base& ) = default;
+  numeric_typedef_base& operator=(      numeric_typedef_base&&) = default;
 
   result_t& operator*=(const result_t& peer)
     noexcept(noexcept( value *= peer.value )) {
@@ -239,6 +243,11 @@ struct numeric_typedef : numeric_typedef_base<V,R,S>
 {
   using base = numeric_typedef_base<V,R,S>;
   using base::base;
+  explicit numeric_typedef() = default;
+  numeric_typedef(const numeric_typedef& ) = default;
+  numeric_typedef(      numeric_typedef&&) = default;
+  numeric_typedef& operator=(const numeric_typedef& ) = default;
+  numeric_typedef& operator=(      numeric_typedef&&) = default;
 protected:
   ~numeric_typedef() = default;
 };
