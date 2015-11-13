@@ -122,6 +122,7 @@ TEST(trace_r) {
   {
     tracing_base::scope_printer P(std::cout);
     foo x = binop::multiply_equal(foo(), r);
+    static_cast<void>(x);
     foo::mark();
     trace_type t = { operation::default_constructor, operation::mark,
       operation::move_constructor, operation::destructor, operation::mark };
@@ -131,6 +132,7 @@ TEST(trace_r) {
   {
     tracing_base::scope_printer P(std::cout);
     auto&& x = binop::multiply_equal(foo(), r);
+    static_cast<void>(x);
     foo::mark();
     trace_type t = { operation::default_constructor, operation::mark,
       operation::move_constructor, operation::destructor, operation::mark };
