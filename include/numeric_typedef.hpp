@@ -69,6 +69,7 @@ template <typename V, typename R, typename S = unsigned>
 struct numeric_typedef_base : data<V,R> {
   using base = data<V,R>;
   using base::value;
+  using base::downcast;
   typedef V value_t;
   typedef R result_t;
   typedef S shift_t;
@@ -77,63 +78,63 @@ struct numeric_typedef_base : data<V,R> {
   result_t& operator*=(const result_t& peer)
     noexcept(noexcept( value *= peer.value )) {
                        value *= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator/=(const result_t& peer)
     noexcept(noexcept( value /= peer.value )) {
                        value /= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator%=(const result_t& peer)
     noexcept(noexcept( value %= peer.value )) {
                        value %= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator+=(const result_t& peer)
     noexcept(noexcept( value += peer.value )) {
                        value += peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator-=(const result_t& peer)
     noexcept(noexcept( value -= peer.value )) {
                        value -= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator<<=(const shift_t& count)
     noexcept(noexcept( value <<= count )) {
                        value <<= count;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator>>=(const shift_t& count)
     noexcept(noexcept( value >>= count )) {
                        value >>= count;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator&=(const result_t& peer)
     noexcept(noexcept( value &= peer.value )) {
                        value &= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator^=(const result_t& peer)
     noexcept(noexcept( value ^= peer.value )) {
                        value ^= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator|=(const result_t& peer)
     noexcept(noexcept( value |= peer.value )) {
                        value |= peer.value;
-    return this->downcast(); }
+    return downcast(); }
 
 
   result_t& operator++()
     noexcept(noexcept( ++value )) {
                        ++value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t& operator--()
     noexcept(noexcept( --value )) {
                        --value;
-    return this->downcast(); }
+    return downcast(); }
 
   result_t operator++(int) noexcept(noexcept(
         std::declval<self_t&>().operator++()) and
