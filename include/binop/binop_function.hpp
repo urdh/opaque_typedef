@@ -183,7 +183,7 @@ noexcept(noexcept(std::move(l |= r))) -> typename
 
 struct multiply_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(multiply_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(multiply_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   multiply_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -191,7 +191,7 @@ struct multiply_equal_t {
 
 struct divide_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(divide_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(divide_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   divide_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -199,7 +199,7 @@ struct divide_equal_t {
 
 struct modulus_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(modulus_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(modulus_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   modulus_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -207,7 +207,7 @@ struct modulus_equal_t {
 
 struct add_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(add_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(add_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   add_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -215,7 +215,7 @@ struct add_equal_t {
 
 struct subtract_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(subtract_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(subtract_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   subtract_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -223,7 +223,7 @@ struct subtract_equal_t {
 
 struct left_shift_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(left_shift_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(left_shift_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   left_shift_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -231,7 +231,7 @@ struct left_shift_equal_t {
 
 struct right_shift_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(right_shift_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(right_shift_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   right_shift_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -239,7 +239,7 @@ struct right_shift_equal_t {
 
 struct bitand_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(bitand_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(bitand_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   bitand_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -247,7 +247,7 @@ struct bitand_equal_t {
 
 struct bitxor_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(bitxor_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(bitxor_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   bitxor_equal(std::forward<T>(l), std::forward<U>(r)); }
@@ -255,7 +255,7 @@ struct bitxor_equal_t {
 
 struct bitor_equal_t {
   template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) noexcept(
+  constexpr auto operator()(T&& l, U&& r) const noexcept(
     noexcept(bitor_equal(std::forward<T>(l), std::forward<U>(r)))) ->
     decltype(bitor_equal(std::forward<T>(l), std::forward<U>(r))) {
     return   bitor_equal(std::forward<T>(l), std::forward<U>(r)); }
