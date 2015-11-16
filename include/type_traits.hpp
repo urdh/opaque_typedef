@@ -43,6 +43,26 @@ template <typename...> struct voider { using type = void; };
 template <typename... T> using void_t = typename voider<T...>::type;
 #endif
 
+namespace detail {
+
+template <typename F, typename... Args>
+using functor_result_t = decltype(std::declval<F>()(std::declval<Args>()...));
+
+template <typename F, typename = void, typename... Args>
+struct functor_well_formed : std::false_type { };
+
+template <typename F, typename... Args>
+struct functor_well_formed<F, void_t<functor_result_t<F,Args...>>, Args...>
+  : std::true_type {
+  using result_type = functor_result_t<F,Args...>;
+};
+
+}
+
+template <typename F, typename... Args>
+using is_functor_call_well_formed
+  = detail::functor_well_formed<F, void, Args...>;
+
 ///
 /// Determine whether a type is decayed
 ///

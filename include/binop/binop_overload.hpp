@@ -171,20 +171,6 @@ static constexpr unsigned binop_conversion_cost() noexcept {
 }
 
 ///
-/// Determine whether a binary operation is well-formed
-///
-
-template <typename F, typename T, typename U, typename = void>
-struct is_binop_well_formed : std::false_type { };
-
-template <typename F, typename T, typename U>
-struct is_binop_well_formed<F,T,U,
-  void_t<typename std::result_of<F(T,U)>::type>> : std::true_type
-{
-  using result_type = typename std::result_of<F(T,U)>::type;
-};
-
-///
 /// Select between the regular overload and the commutative alternative
 ///
 /// If the operator is not commutative, use the regular overload.
@@ -250,9 +236,9 @@ struct overload_selector<true ,true ,OPN,RT,true ,P1,P2,I1,I2,OPS> {
   }
 
   using RN = typename std::decay<typename
-    is_binop_well_formed<OPN,I1&,const I2&>::result_type>::type;
+    is_functor_call_well_formed<OPN,I1&,const I2&>::result_type>::type;
   using RS = typename std::decay<typename
-    is_binop_well_formed<OPS,I2&,const I1&>::result_type>::type;
+    is_functor_call_well_formed<OPS,I2&,const I1&>::result_type>::type;
 
   using type_1 = typename std::conditional<
     swap_cost           <RS,const P1& ,const P2& >() <
@@ -279,8 +265,8 @@ struct overload_selector<true ,true ,OPN,RT,true ,P1,P2,I1,I2,OPS> {
 template <typename OPN, typename RT, bool commutative,
          typename P1, typename P2, typename I1, typename I2, typename OPS>
 using overload_selector_t = overload_selector<
-    is_binop_well_formed<OPN,I1&,I2>::value,
-    is_binop_well_formed<OPS,I2&,I1>::value,
+    is_functor_call_well_formed<OPN,I1&,I2>::value,
+    is_functor_call_well_formed<OPS,I2&,I1>::value,
     OPN,RT,commutative,P1,P2,I1,I2,OPS>;
 
 ///
