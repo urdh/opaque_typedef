@@ -56,14 +56,14 @@ TEST(show_commutative) {
   }
   { tracing_base::scope_printer P(std::cout);
     const T l;
-    auto x = l * foo();
+    auto x = l * T();
   }
   { tracing_base::scope_printer P(std::cout);
     const T r;
-    auto x = foo() * r;
+    auto x = T() * r;
   }
   { tracing_base::scope_printer P(std::cout);
-    auto x = foo() * foo();
+    auto x = T() * T();
   }
 }
 
@@ -75,13 +75,13 @@ TEST(show_noncommutative) {
   }
   { tracing_base::scope_printer P(std::cout);
     const T l;
-    auto x = l - foo();
+    auto x = l - T();
   }
   { tracing_base::scope_printer P(std::cout);
     const T r;
-    auto x = foo() - r;
+    auto x = T() - r;
   }
   { tracing_base::scope_printer P(std::cout);
-    auto x = foo() - foo();
+    auto x = T() - T();
   }
 }
