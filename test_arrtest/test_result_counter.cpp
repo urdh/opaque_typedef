@@ -27,19 +27,37 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-#include "../../include/test/arrtest.hpp"
-#include <string>
+#include "arrtest/arrtest.hpp"
 
 UNIT_TEST_MAIN
 
-TEST(type_name) {
-  CHECK_EQUAL("void", arr::test::type_name<void>());
-  CHECK_EQUAL("char", arr::test::type_name<char>());
-  CHECK_EQUAL("float", arr::test::type_name(static_cast<float>(0)));
-  CHECK_EQUAL("std::string", arr::test::type_name(std::string("hi")));
-  CHECK_EQUAL("std::string", arr::test::type_name<std::string>());
+TEST(constexpr) {
+  constexpr arr::test::result_counter c;
+  CHECK_EQUAL(0u, c.passed());
+  CHECK_EQUAL(0u, c.failed());
+  CHECK_EQUAL(0u, c.raised());
+  CHECK_EQUAL(0u, c.total());
+  CHECK_EQUAL(true , c.successful());
 }
 
-TEST(demangle) {
-  CHECK_EQUAL("hello", arr::test::demangle("hello")); // Not a type name
+TEST(all) {
+  arr::test::result_counter c;
+  c.inc_passed();
+  CHECK_EQUAL(1u, c.passed());
+  CHECK_EQUAL(0u, c.failed());
+  CHECK_EQUAL(0u, c.raised());
+  CHECK_EQUAL(1u, c.total());
+  CHECK_EQUAL(true , c.successful());
+  c.inc_failed();
+  CHECK_EQUAL(1u, c.passed());
+  CHECK_EQUAL(1u, c.failed());
+  CHECK_EQUAL(0u, c.raised());
+  CHECK_EQUAL(2u, c.total());
+  CHECK_EQUAL(false, c.successful());
+  c.inc_raised();
+  CHECK_EQUAL(1u, c.passed());
+  CHECK_EQUAL(1u, c.failed());
+  CHECK_EQUAL(1u, c.raised());
+  CHECK_EQUAL(3u, c.total());
+  CHECK_EQUAL(false, c.successful());
 }

@@ -30,6 +30,7 @@
 NAME = opaque
 VERSION = 1.0.4
 
+COMMON += -Iinclude
 COMMON += -std=c++11 -pedantic
 COMMON += -Wall -Wextra -Wformat=2 -Winit-self -Wmissing-include-dirs
 COMMON += -Wold-style-cast -Wcast-qual -Wcast-align -Wuseless-cast

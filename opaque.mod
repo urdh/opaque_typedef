@@ -45,10 +45,11 @@ example/tutorial.cpp
 #
 [test_trees]
 test
+test_arrtest
 
 #
 # Source files creating unit test executables
 #
 [test_executables]
 test/*.cpp
-test/test/*.cpp
+test_arrtest/*.cpp

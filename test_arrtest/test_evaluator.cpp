@@ -27,7 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-#include "../../include/test/arrtest.hpp"
+#include "arrtest/arrtest.hpp"
 #include <iostream>
 
 UNIT_TEST_MAIN

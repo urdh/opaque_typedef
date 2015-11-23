@@ -26,8 +26,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-#include "../include/type_traits.hpp"
-#include "../include/test/arrtest.hpp"
+#include "opaque/type_traits.hpp"
+#include "arrtest/arrtest.hpp"
 
 using namespace opaque;
 

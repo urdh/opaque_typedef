@@ -26,8 +26,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-#include "../include/convert.hpp"
-#include "../include/test/arrtest.hpp"
+#include "opaque/convert.hpp"
+#include "arrtest/arrtest.hpp"
 #include "tracing_base.hpp"
 #include <iostream>
 

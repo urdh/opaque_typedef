@@ -27,44 +27,37 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-#include "../../include/test/arrtest.hpp"
-#include <iostream>
-#include <sstream>
+#include "arrtest/arrtest.hpp"
+#include <ostream>
+#include <vector>
 
 UNIT_TEST_MAIN
 
-TEST(emit_nullptr) {
-  std::ostringstream stream;
-  arr::test::emit_parameter(stream, nullptr);
-  std::cout << stream.str() << std::endl;
-  CHECK(std::string::npos != stream.str().find("(unprintable)"));
-}
+struct foo { };
+struct bar { };
+std::ostream& operator<<(std::ostream&, const bar&);
+std::ostream& operator<<(std::ostream&, const std::vector<int>&);
+std::ostream& operator<<(std::ostream&, const std::vector<bar>&);
 
-TEST(emit_null_string) {
-  std::ostringstream stream;
-  const char * c = nullptr;
-  arr::test::emit_parameter(stream, c);
-  std::cout << stream.str() << std::endl;
-  CHECK(std::string::npos != stream.str().find("(nullptr)"));
-}
-
-TEST(emit_string) {
-  std::ostringstream stream;
-  arr::test::emit_parameter(stream, "Hello");
-  std::cout << stream.str() << std::endl;
-  CHECK(std::string::npos != stream.str().find("'Hello'"));
-}
-
-TEST(emit_int) {
-  std::ostringstream stream;
-  arr::test::emit_parameter(stream, 3);
-  std::cout << stream.str() << std::endl;
-  CHECK(std::string::npos != stream.str().find("'3'"));
-}
-
-TEST(emit_unprintable) {
-  std::ostringstream stream;
-  arr::test::emit_parameter(stream, std::common_type<int>());
-  std::cout << stream.str() << std::endl;
-  CHECK(std::string::npos != stream.str().find("(unprintable)"));
+TEST(all) {
+  constexpr bool _void = arrtest_trait::is_ostreamable<void>::value;
+  constexpr bool _int = arrtest_trait::is_ostreamable<int>::value;
+  CHECK_EQUAL(false, _void);
+  CHECK_EQUAL(true , _int);
+  constexpr bool _foo = arrtest_trait::is_ostreamable<foo>::value;
+  constexpr bool _bar = arrtest_trait::is_ostreamable<bar>::value;
+  CHECK_EQUAL(false, _foo);
+  CHECK_EQUAL(true , _bar);
+  using vec_char = std::vector<char>;
+  using vec_int  = std::vector<int>;
+  using vec_foo  = std::vector<foo>;
+  using vec_bar  = std::vector<bar>;
+  constexpr bool vc = arrtest_trait::is_ostreamable<vec_char>::value;
+  constexpr bool vi = arrtest_trait::is_ostreamable<vec_int>::value;
+  constexpr bool vf = arrtest_trait::is_ostreamable<vec_foo>::value;
+  constexpr bool vb = arrtest_trait::is_ostreamable<vec_bar>::value;
+  CHECK_EQUAL(false, vc);
+  CHECK_EQUAL(true , vi);
+  CHECK_EQUAL(false, vf);
+  CHECK_EQUAL(true , vb);
 }
