@@ -28,7 +28,7 @@
 #
 
 NAME = opaque
-VERSION = 1.1.0
+VERSION = 1.1.1
 
 COMMON += -Iinclude
 COMMON += -std=c++11 -pedantic
@@ -103,5 +103,5 @@ check: test
 
 everything: doc
 
-doc: include/* include/binop/* include/test/*
+doc: include/opaque/* include/opaque/binop/* include/arrtest/*
 	$(DOXYGEN) Doxyfile
