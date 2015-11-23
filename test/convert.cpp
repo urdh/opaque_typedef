@@ -570,6 +570,7 @@ SUITE(data_overloads) {
     const opaque_t a;
     { tracing_base::scope_printer P(std::cout);
       auto&& x = convert_mutable<underlying>(a);
+      static_cast<void>(x);
     }
     trace_type t = { operation::copy_constructor, operation::destructor };
     CHECK_EQUAL(t.size(), tracing_base::trace.size());
@@ -580,6 +581,7 @@ SUITE(data_overloads) {
     const opaque_t a;
     { tracing_base::scope_printer P(std::cout);
       auto&& x = convert<underlying>(a);
+      static_cast<void>(x);
     }
     trace_type t = { };
     CHECK_EQUAL(t.size(), tracing_base::trace.size());
@@ -590,6 +592,7 @@ SUITE(data_overloads) {
     opaque_t a;
     { tracing_base::scope_printer P(std::cout);
       auto&& x = convert_mutable<underlying>(a);
+      static_cast<void>(x);
     }
     trace_type t = { };
     CHECK_EQUAL(t.size(), tracing_base::trace.size());
@@ -600,6 +603,7 @@ SUITE(data_overloads) {
     opaque_t a;
     { tracing_base::scope_printer P(std::cout);
       auto&& x = convert<underlying>(a);
+      static_cast<void>(x);
     }
     trace_type t = { };
     CHECK_EQUAL(t.size(), tracing_base::trace.size());
@@ -610,6 +614,7 @@ SUITE(data_overloads) {
     opaque_t a;
     { tracing_base::scope_printer P(std::cout);
       auto&& x = convert_mutable<underlying>(std::move(a));
+      static_cast<void>(x);
     }
     trace_type t = { };
     CHECK_EQUAL(t.size(), tracing_base::trace.size());
@@ -620,6 +625,7 @@ SUITE(data_overloads) {
     opaque_t a;
     { tracing_base::scope_printer P(std::cout);
       auto&& x = convert<underlying>(std::move(a));
+      static_cast<void>(x);
     }
     trace_type t = { };
     CHECK_EQUAL(t.size(), tracing_base::trace.size());
