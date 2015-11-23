@@ -29,6 +29,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 #include "type_traits.hpp"
+#include "data.hpp"
 #include <type_traits>
 #include <utility>
 
@@ -121,64 +122,200 @@ struct converter<T, U, true> { // same as U&&
 template <typename T, typename U>
 struct converter<T, const U&, false> {
 
-  static constexpr             T   convert_mutable(const U&  u) noexcept(
-    noexcept(static_cast<      T  >(u))) {
-    return   static_cast<      T  >(u); }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(const U&  u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
 
-  static constexpr             T   convert(        const U&  u) noexcept(
-    noexcept(static_cast<      T  >(u))) {
-    return   static_cast<      T  >(u); }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(const U&  u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
 
-  static constexpr unsigned mutable_cost() noexcept { return 2; }
-  static constexpr unsigned         cost() noexcept { return 2; }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(        const U&  u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
+
+  template <typename R=const T&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(        const U&  u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
+
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 2; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 2; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 2; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 0; }
 
 };
 
 template <typename T, typename U>
 struct converter<T, U&, false> {
 
-  static constexpr             T   convert_mutable(      U&  u) noexcept(
-    noexcept(static_cast<      T  >(u))) {
-    return   static_cast<      T  >(u); }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(      U&  u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
 
-  static constexpr             T   convert(              U&  u) noexcept(
-    noexcept(static_cast<      T  >(u))) {
-    return   static_cast<      T  >(u); }
+  template <typename R=T&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(      U&  u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
 
-  static constexpr unsigned mutable_cost() noexcept { return 2; }
-  static constexpr unsigned         cost() noexcept { return 2; }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(              U&  u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
 
+  template <typename R=T&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(              U&  u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
+
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 2; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 0; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 2; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 0; }
 };
+
 
 template <typename T, typename U>
 struct converter<T, U&&, false> {
 
-  static constexpr             T   convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<      T  >(std::move(u)))) {
-    return   static_cast<      T  >(std::move(u)); }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(      U&& u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
 
-  static constexpr             T   convert(              U&& u) noexcept(
-    noexcept(static_cast<      T  >(std::move(u)))) {
-    return   static_cast<      T  >(std::move(u)); }
+  template <typename R=T&&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(      U&& u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
 
-  static constexpr unsigned mutable_cost() noexcept { return 1; }
-  static constexpr unsigned         cost() noexcept { return 1; }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(              U&& u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
 
+  template <typename R=T&&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(              U&& u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
+
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 1; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 0; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 1; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 0; }
 };
+
 
 template <typename T, typename U>
 struct converter<T, U, false> { // same as U&&
 
-  static constexpr             T   convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<      T  >(std::move(u)))) {
-    return   static_cast<      T  >(std::move(u)); }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(      U&& u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
 
-  static constexpr             T   convert(              U&& u) noexcept(
-    noexcept(static_cast<      T  >(std::move(u)))) {
-    return   static_cast<      T  >(std::move(u)); }
+  template <typename R=T&&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert_mutable(      U&& u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
 
-  static constexpr unsigned mutable_cost() noexcept { return 1; }
-  static constexpr unsigned         cost() noexcept { return 1; }
+  template <typename R=T>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(              U&& u) noexcept(
+    noexcept(static_cast<R>(u))) {
+    return   static_cast<R>(u); }
+
+  template <typename R=T&&>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                convert(              U&& u) noexcept(
+    noexcept(static_cast<R>(u.value))) {
+    return   static_cast<R>(u.value); }
+
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 1; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type         mutable_cost() noexcept { return 0; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 1; }
+  template <typename R=unsigned>
+  static constexpr
+  typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
+           R>::type                 cost() noexcept { return 0; }
 
 };
 

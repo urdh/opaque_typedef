@@ -560,3 +560,88 @@ SUITE(test_functions) {
   }
 
 }
+
+SUITE(data_overloads) {
+
+  using underlying = base;
+  struct opaque_t : data<underlying, opaque_t> { };
+
+  TEST(cmc) {
+    const opaque_t a;
+    { tracing_base::scope_printer P(std::cout);
+      auto&& x = convert_mutable<underlying>(a);
+    }
+    trace_type t = { operation::copy_constructor, operation::destructor };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+
+  TEST(c_c) {
+    const opaque_t a;
+    { tracing_base::scope_printer P(std::cout);
+      auto&& x = convert<underlying>(a);
+    }
+    trace_type t = { };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+
+  TEST(cml) {
+    opaque_t a;
+    { tracing_base::scope_printer P(std::cout);
+      auto&& x = convert_mutable<underlying>(a);
+    }
+    trace_type t = { };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+
+  TEST(c_l) {
+    opaque_t a;
+    { tracing_base::scope_printer P(std::cout);
+      auto&& x = convert<underlying>(a);
+    }
+    trace_type t = { };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+
+  TEST(cmr) {
+    opaque_t a;
+    { tracing_base::scope_printer P(std::cout);
+      auto&& x = convert_mutable<underlying>(std::move(a));
+    }
+    trace_type t = { };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+
+  TEST(c_r) {
+    opaque_t a;
+    { tracing_base::scope_printer P(std::cout);
+      auto&& x = convert<underlying>(std::move(a));
+    }
+    trace_type t = { };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+
+  TEST(costs) {
+    CHECK_EQUAL(2u, converter<base,const opaque_t& >::mutable_cost());
+    CHECK_EQUAL(0u, converter<base,const opaque_t& >::cost());
+    CHECK_EQUAL(0u, converter<base,      opaque_t& >::mutable_cost());
+    CHECK_EQUAL(0u, converter<base,      opaque_t& >::cost());
+    CHECK_EQUAL(0u, converter<base,      opaque_t&&>::mutable_cost());
+    CHECK_EQUAL(0u, converter<base,      opaque_t&&>::cost());
+
+    const opaque_t a;
+    opaque_t b;
+    CHECK_EQUAL(2u, convert_mutable_cost<base>(a));
+    CHECK_EQUAL(0u, convert_cost        <base>(a));
+    CHECK_EQUAL(0u, convert_mutable_cost<base>(b));
+    CHECK_EQUAL(0u, convert_cost        <base>(b));
+    CHECK_EQUAL(0u, convert_mutable_cost<base>(opaque_t()));
+    CHECK_EQUAL(0u, convert_cost        <base>(opaque_t()));
+  }
+
+}

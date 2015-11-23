@@ -39,49 +39,389 @@ using operation = tracing_base::operation;
 
 UNIT_TEST_MAIN
 
-struct foo
-  : tracing_base
-  , binop::multipliable<foo>
-  , binop::subtractable<foo>
-{
-  foo& operator*=(const foo&) noexcept { mark(); return *this; }
-  foo& operator-=(const foo&) noexcept { mark(); return *this; }
+struct underlying : tracing_base {
+  underlying& operator-=(const underlying&) { mark(); return *this; }
+  underlying& operator&=(const underlying&) { mark(); return *this; }
+  underlying& operator^=(const underlying&) { mark(); return *this; }
 };
 
-TEST(show_commutative) {
-  using T = foo;
-  { tracing_base::scope_printer P(std::cout);
-    const T l, r;
-    auto x = l * r;
+struct opaque_t : data<underlying, opaque_t>
+  , binop::subtractable<opaque_t>
+  , binop::bitandable<opaque_t>
+  , binop::bitxorable<opaque_t, true, opaque_t, opaque_t,
+                      underlying, underlying>
+{
+  explicit opaque_t(underlying u) : data(std::move(u)) { }
+  opaque_t() = default;
+  opaque_t& operator-=(const opaque_t& peer) {
+    value -= peer.value;
+    return downcast();
   }
-  { tracing_base::scope_printer P(std::cout);
-    const T l;
-    auto x = l * T();
+  opaque_t& operator&=(const opaque_t& peer) {
+    value &= peer.value;
+    return downcast();
   }
-  { tracing_base::scope_printer P(std::cout);
-    const T r;
-    auto x = T() * r;
+  opaque_t& operator^=(const opaque_t& peer) {
+    value ^= peer.value;
+    return downcast();
   }
-  { tracing_base::scope_printer P(std::cout);
-    auto x = T() * T();
-  }
-}
+};
 
 TEST(show_noncommutative) {
-  using T = foo;
+  using T = opaque_t;
   { tracing_base::scope_printer P(std::cout);
     const T l, r;
     auto x = l - r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp / x
+      operation::mark               , // operation
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
   }
   { tracing_base::scope_printer P(std::cout);
     const T l;
     auto x = l - T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp / x
+      operation::mark               , // operation
+    //operation::destructor         , // x not destroyed yet
+      operation::destructor         , // r
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
   }
   { tracing_base::scope_printer P(std::cout);
     const T r;
     auto x = T() - r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // x
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T l, r;
+    auto x = l - r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp / x
+      operation::mark               , // operation
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T l;
+    auto x = l - T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp / x
+      operation::mark               , // operation
+    //operation::destructor         , // x not destroyed yet
+      operation::destructor         , // r
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T r;
+    auto x = T() - r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // x
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
   }
   { tracing_base::scope_printer P(std::cout);
     auto x = T() - T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // x
+    //operation::destructor         , // x not destroyed yet
+      operation::destructor         , // r
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+}
+
+TEST(show_commutative) {
+  using T = opaque_t;
+  { tracing_base::scope_printer P(std::cout);
+    const T l, r;
+    auto x = l & r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp / x
+      operation::mark               , // operation
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    const T l;
+    auto x = l & T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // temp / x
+    //operation::destructor         , // x not destroyed yet
+      operation::destructor         , // r
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    const T r;
+    auto x = T() & r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // x
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T l, r;
+    auto x = l & r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp / x
+      operation::mark               , // operation
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T l;
+    auto x = l & T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // temp / x
+    //operation::destructor         , // x not destroyed yet
+      operation::destructor         , // r
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T r;
+    auto x = T() & r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // x
+    //operation::destructor         , // x not destroyed yet
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    auto x = T() & T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::mark               , // operation
+      operation::move_constructor   , // x
+    //operation::destructor         , // x not destroyed yet
+      operation::destructor         , // r
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+}
+
+TEST(show_converting) {
+  using T = opaque_t;
+  { tracing_base::scope_printer P(std::cout);
+    const T l, r;
+    auto x = l ^ r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+      operation::destructor         , // temp
+    //operation::destructor         , // r not destroyed yet
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    const T l;
+    auto x = l ^ T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+    //operation::copy_constructor   , // no temp (commutative)
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+    //operation::destructor         , // no temp (commutative)
+      operation::destructor         , // r
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    const T r;
+    auto x = T() ^ r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+    //operation::copy_constructor   , // no temp
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+    //operation::destructor         , // no temp
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T l, r;
+    auto x = l ^ r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+      operation::copy_constructor   , // temp
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+      operation::destructor         , // temp
+    //operation::destructor         , // r not destroyed yet
+    //operation::destructor         , // l not destroyed yet
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T l;
+    auto x = l ^ T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+    //operation::copy_constructor   , // no temp
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+    //operation::destructor         , // no temp
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    T r;
+    auto x = T() ^ r;
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+    //operation::copy_constructor   , // no temp
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+    //operation::destructor         , // no temp
+    //operation::destructor         , // r not destroyed yet
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
+  }
+  { tracing_base::scope_printer P(std::cout);
+    auto x = T() ^ T();
+    trace_type t = {
+      operation::default_constructor, // l
+      operation::default_constructor, // r
+    //operation::copy_constructor   , // no temp
+      operation::mark               , // operation
+      operation::move_constructor   , // T ctor argument
+      operation::move_constructor   , // data ctor argument
+      operation::move_constructor   , // data value
+      operation::destructor         , // data ctor argument
+      operation::destructor         , // T ctor argument
+    //operation::destructor         , // no temp
+      operation::destructor         , // r
+      operation::destructor         , // l
+    };
+    CHECK_EQUAL(t.size(), tracing_base::trace.size());
+    CHECK_RANGE_EQUAL(t.begin(), tracing_base::trace.begin(), t.size());
   }
 }
