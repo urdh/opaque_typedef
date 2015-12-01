@@ -31,8 +31,8 @@
 
 UNIT_TEST_MAIN
 
-TEST(constexpr) {
-  constexpr arr::test::result_counter c;
+TEST(construction) {
+  arr::test::result_counter c;
   CHECK_EQUAL(0u, c.passed());
   CHECK_EQUAL(0u, c.failed());
   CHECK_EQUAL(0u, c.raised());
