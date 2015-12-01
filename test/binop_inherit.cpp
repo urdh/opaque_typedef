@@ -52,7 +52,7 @@ struct opaque_t : data<underlying, opaque_t>
                       underlying, underlying>
 {
   explicit opaque_t(underlying u) : data(std::move(u)) { }
-  opaque_t() = default;
+  opaque_t() { } // User-provided for const instances without initializer
   opaque_t& operator-=(const opaque_t& peer) {
     value -= peer.value;
     return downcast();
