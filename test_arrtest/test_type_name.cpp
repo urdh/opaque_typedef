@@ -36,8 +36,10 @@ TEST(type_name) {
   CHECK_EQUAL("void", arr::test::type_name<void>());
   CHECK_EQUAL("char", arr::test::type_name<char>());
   CHECK_EQUAL("float", arr::test::type_name(static_cast<float>(0)));
-  CHECK_EQUAL("std::string", arr::test::type_name(std::string("hi")));
-  CHECK_EQUAL("std::string", arr::test::type_name<std::string>());
+  constexpr char std[] = "std::";
+  auto len = sizeof(std) - 1;
+  CHECK_RANGE_EQUAL(std, arr::test::type_name(std::string("hi")).begin(), len);
+  CHECK_RANGE_EQUAL(std, arr::test::type_name<std::string>().begin(), len);
 }
 
 TEST(demangle) {
