@@ -36,7 +36,6 @@ UNIT_TEST_MAIN
 struct foo { };
 struct bar { };
 std::ostream& operator<<(std::ostream&, const bar&);
-std::ostream& operator<<(std::ostream&, const std::vector<int>&);
 std::ostream& operator<<(std::ostream&, const std::vector<bar>&);
 
 TEST(all) {
@@ -49,15 +48,12 @@ TEST(all) {
   CHECK_EQUAL(false, _foo);
   CHECK_EQUAL(true , _bar);
   using vec_char = std::vector<char>;
-  using vec_int  = std::vector<int>;
   using vec_foo  = std::vector<foo>;
   using vec_bar  = std::vector<bar>;
   constexpr bool vc = arrtest_trait::is_ostreamable<vec_char>::value;
-  constexpr bool vi = arrtest_trait::is_ostreamable<vec_int>::value;
   constexpr bool vf = arrtest_trait::is_ostreamable<vec_foo>::value;
   constexpr bool vb = arrtest_trait::is_ostreamable<vec_bar>::value;
   CHECK_EQUAL(false, vc);
-  CHECK_EQUAL(true , vi);
   CHECK_EQUAL(false, vf);
   CHECK_EQUAL(true , vb);
 }
