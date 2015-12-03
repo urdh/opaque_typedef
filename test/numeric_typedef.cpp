@@ -348,7 +348,7 @@ SUITE(compare) {
     bool a_noexcept = noexcept(a==a);
     bool e_noexcept = noexcept(e==e);
     auto a_return   =          a==a ;
-    auto e_return   =          e==e ;
+    auto e_return   =          true ;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return);
   }
@@ -366,7 +366,7 @@ SUITE(compare) {
     bool a_noexcept = noexcept(a!=a);
     bool e_noexcept = noexcept(e!=e);
     auto a_return   =          a!=a ;
-    auto e_return   =          e!=e ;
+    auto e_return   =          false;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return);
   }
@@ -384,7 +384,7 @@ SUITE(compare) {
     bool a_noexcept = noexcept(a< a);
     bool e_noexcept = noexcept(e< e);
     auto a_return   =          a< a ;
-    auto e_return   =          e< e ;
+    auto e_return   =          false;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return);
   }
@@ -402,7 +402,7 @@ SUITE(compare) {
     bool a_noexcept = noexcept(a> a);
     bool e_noexcept = noexcept(e> e);
     auto a_return   =          a> a ;
-    auto e_return   =          e> e ;
+    auto e_return   =          false;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return);
   }
@@ -420,7 +420,7 @@ SUITE(compare) {
     bool a_noexcept = noexcept(a<=a);
     bool e_noexcept = noexcept(e<=e);
     auto a_return   =          a<=a ;
-    auto e_return   =          e<=e ;
+    auto e_return   =          true ;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return);
   }
@@ -438,7 +438,7 @@ SUITE(compare) {
     bool a_noexcept = noexcept(a>=a);
     bool e_noexcept = noexcept(e>=e);
     auto a_return   =          a>=a ;
-    auto e_return   =          e>=e ;
+    auto e_return   =          true ;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return);
   }
