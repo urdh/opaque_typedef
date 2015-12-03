@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013
+// Copyright (c) 2013, 2015
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -62,9 +62,7 @@ TEST(evaluator) {
   // Exception raised
   try {
     throw false;
-    eval(FILE_LINE);
-    eval.unraised("bool");
-  } catch (bool& caught) {
+  } catch (bool&) {
     eval.raised("bool");
   }
   CHECK_EQUAL(4u, counter.passed());
@@ -75,7 +73,7 @@ TEST(evaluator) {
     // throw false;
     eval(FILE_LINE);
     eval.unraised("bool");
-  } catch (bool& caught) {
+  } catch (bool&) {
     eval.raised("bool");
   }
   CHECK_EQUAL(4u, counter.passed());

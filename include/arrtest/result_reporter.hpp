@@ -1,7 +1,7 @@
 #ifndef ARR_TEST_RESULT_REPORTER_HPP
 #define ARR_TEST_RESULT_REPORTER_HPP
 //
-// Copyright (c) 2013
+// Copyright (c) 2013, 2015
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -59,7 +59,6 @@ inline std::ostream& operator<<(std::ostream& stream, const test_context& c) {
 /// @name Parameter output
 /// @{
 /// @details
-///
 /// First output the parameter's type name.  Then, if the parameter can be
 /// formatted through a std::ostream, output that representation in single
 /// quotation marks.  If the parameter cannot be formatted through a
