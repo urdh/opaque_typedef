@@ -28,17 +28,16 @@
 #
 
 NAME = opaque
-VERSION = 1.1.3
+VERSION = 1.1.4
 
 COMMON += -Iinclude
 COMMON += -std=c++11 -pedantic
 COMMON += -Wall -Wextra -Wformat=2 -Winit-self -Wmissing-include-dirs
-COMMON += -Wold-style-cast -Wcast-qual -Wcast-align -Wuseless-cast
-COMMON += -Wconversion -Wzero-as-null-pointer-constant
+COMMON += -Wold-style-cast -Wcast-qual -Wcast-align -Wconversion
 COMMON += -Wmissing-declarations -Wredundant-decls -Wundef
 COMMON += -Wfloat-equal -Wunused -Wsign-promo
 COMMON += -Wswitch-default -Wswitch-enum
-COMMON += -Wlogical-op -Woverloaded-virtual
+COMMON += -Woverloaded-virtual
 COMMON += -Wshadow -Wdisabled-optimization
 
 COMMON_FLAG += $(COMMON)
