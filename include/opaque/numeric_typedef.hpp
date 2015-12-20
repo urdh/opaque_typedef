@@ -189,7 +189,7 @@ struct numeric_typedef_base : data<V,R> {
 
 
   using base::base;
-  explicit constexpr numeric_typedef_base() = default;
+  explicit numeric_typedef_base() = default;
   numeric_typedef_base(const numeric_typedef_base& ) = default;
   numeric_typedef_base(      numeric_typedef_base&&) = default;
   numeric_typedef_base& operator=(const numeric_typedef_base& ) = default;
