@@ -99,6 +99,7 @@ check: test
 	normal/binop_overload
 	normal/binop_inherit
 	normal/numeric_typedef
+	normal/inconvertibool
 
 everything: doc
 
