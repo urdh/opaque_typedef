@@ -53,9 +53,10 @@ struct data {
   }
 
   /// Construct with a given value
-  explicit constexpr data(underlying_type v)
-    noexcept(std::is_nothrow_move_constructible<underlying_type>::value)
-    : value(std::move(v)) { }
+  template <typename T>
+  explicit constexpr data(T&& initial)
+    noexcept(std::is_nothrow_constructible<underlying_type, T&&>::value)
+    : value(std::forward<T>(initial)) { }
 
   data() = default;
   data(const data& ) = default;

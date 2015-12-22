@@ -294,9 +294,7 @@ TEST(show_converting) {
       operation::copy_constructor   , // temp
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
       operation::destructor         , // temp
     //operation::destructor         , // r not destroyed yet
@@ -314,9 +312,7 @@ TEST(show_converting) {
     //operation::copy_constructor   , // no temp (commutative)
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
     //operation::destructor         , // no temp (commutative)
       operation::destructor         , // r
@@ -334,9 +330,7 @@ TEST(show_converting) {
     //operation::copy_constructor   , // no temp
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
     //operation::destructor         , // no temp
     //operation::destructor         , // r not destroyed yet
@@ -354,9 +348,7 @@ TEST(show_converting) {
       operation::copy_constructor   , // temp
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
       operation::destructor         , // temp
     //operation::destructor         , // r not destroyed yet
@@ -374,9 +366,7 @@ TEST(show_converting) {
     //operation::copy_constructor   , // no temp
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
     //operation::destructor         , // no temp
     //operation::destructor         , // r not destroyed yet
@@ -394,9 +384,7 @@ TEST(show_converting) {
     //operation::copy_constructor   , // no temp
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
     //operation::destructor         , // no temp
     //operation::destructor         , // r not destroyed yet
@@ -413,9 +401,7 @@ TEST(show_converting) {
     //operation::copy_constructor   , // no temp
       operation::mark               , // operation
       operation::move_constructor   , // T ctor argument
-      operation::move_constructor   , // data ctor argument
       operation::move_constructor   , // data value
-      operation::destructor         , // data ctor argument
       operation::destructor         , // T ctor argument
     //operation::destructor         , // no temp
       operation::destructor         , // r
