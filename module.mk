@@ -28,7 +28,7 @@
 #
 
 NAME = opaque
-VERSION = 1.1.5
+VERSION = 1.1.6
 
 COMMON += -Iinclude
 COMMON += -std=c++11 -pedantic
