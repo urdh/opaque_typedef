@@ -104,7 +104,7 @@ unsigned verify_asm_builtin(unsigned, unsigned);
 unsigned verify_asm_opaque(unsigned, unsigned);
 
 void do_add() {
-  using N = unsigned;
+  using N = int;
   using A = address<N>;
   using O =  offset<N>;
   A a(0);
@@ -121,7 +121,7 @@ void do_add() {
 }
 
 void do_sub() {
-  using N = unsigned;
+  using N = int;
   using A = address<N>;
   using O =  offset<N>;
   A a(0);
@@ -138,7 +138,7 @@ void do_sub() {
 }
 
 void do_commutative_flavors() {
-  using N = unsigned;
+  using N = int;
   using A = address<N>;
   using O =  offset<N>;
   A a(0);
@@ -158,7 +158,7 @@ void do_commutative_flavors() {
 }
 
 void do_other() {
-  using N = unsigned;
+  using N = int;
   using A = address<N>;
   using O =  offset<N>;
   N n(0);
@@ -202,7 +202,7 @@ int main() {
 
   using address_t = address<unsigned>;
   using offset_t  = offset<unsigned>;
-  address_t a(40);
-  offset_t  o(2);
+  address_t a(40u);
+  offset_t  o(2u);
   std::cout << a+o << "\n";
 }

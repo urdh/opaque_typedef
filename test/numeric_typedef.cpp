@@ -728,8 +728,8 @@ SUITE(realistic) {
     using N = unsigned;
     using A = address<N>;
     using O =  offset<N>;
-    A a(0);
-    O o(0);
+    A a(0u);
+    O o(0u);
   //a = a + a; // error
     a = a + o; // legal
     a = o + a; // legal
@@ -745,8 +745,8 @@ SUITE(realistic) {
     using N = unsigned;
     using A = address<N>;
     using O =  offset<N>;
-    A a(0);
-    O o(0);
+    A a(0u);
+    O o(0u);
   //a = a - a; // error
     a = a - o; // legal
   //a = o - a; // error
@@ -762,29 +762,29 @@ SUITE(realistic) {
     using N = unsigned;
     using A = address<N>;
     using O =  offset<N>;
-    A a(0);
-    O o(0);
-    a =   a  +   o ;
-    a =   a  + O(0);
-    a = A(0) +   o ;
-    a = A(0) + O(0);
-    a =   o  +   a ;
-    a =   o  + A(0);
-    a = O(0) +   a ;
-    a = O(0) + A(0);
-    a =   a  -   o ;
-    a =   a  - O(0);
-    a = A(0) -   o ;
-    a = A(0) - O(0);
+    A a(0u);
+    O o(0u);
+    a =   a   +   o  ;
+    a =   a   + O(0u);
+    a = A(0u) +   o  ;
+    a = A(0u) + O(0u);
+    a =   o   +   a  ;
+    a =   o   + A(0u);
+    a = O(0u) +   a  ;
+    a = O(0u) + A(0u);
+    a =   a   -   o  ;
+    a =   a   - O(0u);
+    a = A(0u) -   o  ;
+    a = A(0u) - O(0u);
   }
 
   TEST(noexcept) {
     using N = unsigned;
     using A = address<N>;
     using O =  offset<N>;
-    A a(0);
-    O o(0);
-    bool create_destroy = noexcept( A(1) );
+    A a(0u);
+    O o(0u);
+    bool create_destroy = noexcept( A(1u) );
     CHECK_EQUAL(true, create_destroy);
     bool operate = noexcept( a = o + a );
     CHECK_EQUAL(true, operate);

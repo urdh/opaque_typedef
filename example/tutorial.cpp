@@ -71,8 +71,8 @@ operator<<(std::ostream& stream, const opaque::numeric_typedef_base<TP...>& v) {
 
 int main() {
   myint x(1);
-  address<unsigned> a(2);
-  offset<unsigned> o(3);
+  address<unsigned> a(2u);
+  offset<unsigned> o(3u);
   std::cout << "myint(1) << 4: " << (x<<4) << "\n";
   std::cout << "address(2) + offset(3): " << a + o << "\n";
 }
