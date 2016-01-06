@@ -1,7 +1,7 @@
 #ifndef OPAQUE_BINOP_OVERLOAD_HPP
 #define OPAQUE_BINOP_OVERLOAD_HPP
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+#include "../constexpr14.hpp"
 #include "../type_traits.hpp"
 #include "../convert.hpp"
 #include <utility>
@@ -50,7 +51,7 @@ template <typename OP, typename RT,
          typename P1, typename P2, typename I1, typename I2>
 struct overload<OP,RT,false,const P1& ,const P2& ,I1,I2> {
   // No return type conversion - enable NRVO
-  template <typename R=RT> static
+  template <typename R=RT> static constexpr14
   typename std::enable_if<    std::is_same<RT,I1>::value, R>::type
   func(const P1&  p1, const P2&  p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
@@ -60,7 +61,7 @@ struct overload<OP,RT,false,const P1& ,const P2& ,I1,I2> {
     return temp;
   }
   // Return type conversion
-  template <typename R=RT> static
+  template <typename R=RT> static constexpr14
   typename std::enable_if<not std::is_same<RT,I1>::value, R>::type
   func(const P1&  p1, const P2&  p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
@@ -76,7 +77,7 @@ template <typename OP, typename RT,
          typename P1, typename P2, typename I1, typename I2>
 struct overload<OP,RT,false,const P1& ,      P2&&,I1,I2> {
   // No return type conversion - enable NRVO
-  template <typename R=RT> static
+  template <typename R=RT> static constexpr14
   typename std::enable_if<    std::is_same<RT,I1>::value, R>::type
   func(const P1&  p1,       P2&& p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
@@ -86,7 +87,7 @@ struct overload<OP,RT,false,const P1& ,      P2&&,I1,I2> {
     return temp;
   }
   // Return type conversion
-  template <typename R=RT> static
+  template <typename R=RT> static constexpr14
   typename std::enable_if<not std::is_same<RT,I1>::value, R>::type
   func(const P1&  p1,       P2&& p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and

@@ -1,7 +1,7 @@
-#ifndef OPAQUE_DATA_HPP
-#define OPAQUE_DATA_HPP
+#ifndef OPAQUE_CONSTEXPR14_HPP
+#define OPAQUE_CONSTEXPR14_HPP
 //
-// Copyright (c) 2015, 2016
+// Copyright (c) 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,52 +28,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-#include "constexpr14.hpp"
-#include <utility>
-#include <type_traits>
 
 namespace opaque {
 
-/// \addtogroup internal
+/// \addtogroup miscellaneous
 /// @{
 
-///
-/// Data storage for opaque typedefs
-///
-template <typename U, typename O>
-struct data {
-  typedef U underlying_type;
-  typedef O opaque_type;
-
-  underlying_type value;
-
-  /// Copy the underlying value
-  explicit constexpr operator underlying_type() const
-    noexcept(std::is_nothrow_copy_constructible<underlying_type>::value) {
-    return value;
-  }
-
-  /// Construct with a given value
-  template <typename T>
-  explicit constexpr data(T&& initial)
-    noexcept(std::is_nothrow_constructible<underlying_type, T&&>::value)
-    : value(std::forward<T>(initial)) { }
-
-  data() = default;
-  data(const data& ) = default;
-  data(      data&&) = default;
-  data& operator=(const data& ) = default;
-  data& operator=(      data&&) = default;
-protected:
-  ~data() = default;
-
-  /// Downcast to the opaque_type
-  constexpr14 opaque_type& downcast() noexcept {
-    static_assert(std::is_base_of<data, opaque_type>::value, "Bad downcast");
-    return *static_cast<opaque_type*>(this);
-  }
-
-};
+/// If C++14 constexpr (N3652) is supported, the keyword constexpr, else blank
+#if defined __cpp_constexpr && __cpp_constexpr >= 201304
+#define constexpr14 constexpr
+#else
+#define constexpr14
+#endif
 
 /// @}
 

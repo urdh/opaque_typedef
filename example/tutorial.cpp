@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -52,11 +52,11 @@ struct address : opaque::numeric_typedef_base<T, address<T>>
   address& operator*=(const address&) = delete;
   address& operator+=(const address&) = delete;
   address& operator-=(const address&) = delete;
-  address& operator+=(const offset<T>& o) {
+  constexpr14 address& operator+=(const offset<T>& o) {
     this->value += o.value;
     return *this;
   }
-  address& operator-=(const offset<T>& o) {
+  constexpr14 address& operator-=(const offset<T>& o) {
     this->value -= o.value;
     return *this;
   }
@@ -71,8 +71,9 @@ operator<<(std::ostream& stream, const opaque::numeric_typedef_base<TP...>& v) {
 
 int main() {
   myint x(1);
-  address<unsigned> a(2u);
-  offset<unsigned> o(3u);
   std::cout << "myint(1) << 4: " << (x<<4) << "\n";
-  std::cout << "address(2) + offset(3): " << a + o << "\n";
+  constexpr address<unsigned> a(2u);
+  constexpr offset<unsigned> o(3u);
+  constexpr14 auto sum = a + o;
+  std::cout << "address(2) + offset(3): " << sum << "\n";
 }

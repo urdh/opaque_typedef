@@ -1,7 +1,7 @@
 #ifndef OPAQUE_NUMERIC_TYPEDEF_HPP
 #define OPAQUE_NUMERIC_TYPEDEF_HPP
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -75,73 +75,73 @@ struct numeric_typedef_base : data<V,R> {
   typedef S shift_t;
   typedef numeric_typedef_base<V,R,S> self_t;
 
-  result_t& operator*=(const result_t& peer)
+  constexpr14 result_t& operator*=(const result_t& peer)
     noexcept(noexcept( value *= peer.value )) {
                        value *= peer.value;
     return downcast(); }
 
-  result_t& operator/=(const result_t& peer)
+  constexpr14 result_t& operator/=(const result_t& peer)
     noexcept(noexcept( value /= peer.value )) {
                        value /= peer.value;
     return downcast(); }
 
-  result_t& operator%=(const result_t& peer)
+  constexpr14 result_t& operator%=(const result_t& peer)
     noexcept(noexcept( value %= peer.value )) {
                        value %= peer.value;
     return downcast(); }
 
-  result_t& operator+=(const result_t& peer)
+  constexpr14 result_t& operator+=(const result_t& peer)
     noexcept(noexcept( value += peer.value )) {
                        value += peer.value;
     return downcast(); }
 
-  result_t& operator-=(const result_t& peer)
+  constexpr14 result_t& operator-=(const result_t& peer)
     noexcept(noexcept( value -= peer.value )) {
                        value -= peer.value;
     return downcast(); }
 
-  result_t& operator<<=(const shift_t& count)
+  constexpr14 result_t& operator<<=(const shift_t& count)
     noexcept(noexcept( value <<= count )) {
                        value <<= count;
     return downcast(); }
 
-  result_t& operator>>=(const shift_t& count)
+  constexpr14 result_t& operator>>=(const shift_t& count)
     noexcept(noexcept( value >>= count )) {
                        value >>= count;
     return downcast(); }
 
-  result_t& operator&=(const result_t& peer)
+  constexpr14 result_t& operator&=(const result_t& peer)
     noexcept(noexcept( value &= peer.value )) {
                        value &= peer.value;
     return downcast(); }
 
-  result_t& operator^=(const result_t& peer)
+  constexpr14 result_t& operator^=(const result_t& peer)
     noexcept(noexcept( value ^= peer.value )) {
                        value ^= peer.value;
     return downcast(); }
 
-  result_t& operator|=(const result_t& peer)
+  constexpr14 result_t& operator|=(const result_t& peer)
     noexcept(noexcept( value |= peer.value )) {
                        value |= peer.value;
     return downcast(); }
 
 
-  result_t& operator++()
+  constexpr14 result_t& operator++()
     noexcept(noexcept( ++value )) {
                        ++value;
     return downcast(); }
 
-  result_t& operator--()
+  constexpr14 result_t& operator--()
     noexcept(noexcept( --value )) {
                        --value;
     return downcast(); }
 
-  result_t operator++(int) noexcept(noexcept(
+  constexpr14 result_t operator++(int) noexcept(noexcept(
         std::declval<self_t&>().operator++()) and
         std::is_nothrow_constructible<result_t, value_t>::value) {
     result_t r(value); operator++(); return r; }
 
-  result_t operator--(int) noexcept(noexcept(
+  constexpr14 result_t operator--(int) noexcept(noexcept(
         std::declval<self_t&>().operator--()) and
         std::is_nothrow_constructible<result_t, value_t>::value) {
     result_t r(value); operator--(); return r; }

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -83,12 +83,12 @@ template <typename T> struct address : numeric_typedef_base<T, address<T>>
   address& operator-=(const address&) = delete;
 
   // Add desired operations
-  address& operator+=(const offset<T>& o) noexcept(noexcept(
+  constexpr14 address& operator+=(const offset<T>& o) noexcept(noexcept(
     std::declval<T&>() += o.value )) {
            this->value += o.value;
     return *this;
   }
-  address& operator-=(const offset<T>& o) noexcept(noexcept(
+  constexpr14 address& operator-=(const offset<T>& o) noexcept(noexcept(
     std::declval<T&>() -= o.value )) {
            this->value -= o.value;
     return *this;
@@ -205,4 +205,8 @@ int main() {
   address_t a(40u);
   offset_t  o(2u);
   std::cout << a+o << "\n";
+  constexpr auto A = address_t(5u);
+  constexpr auto O = offset_t(5u);
+  constexpr14 auto B = A+O;
+  std::cout << B << "\n";
 }
