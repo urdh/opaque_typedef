@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015
+# Copyright (c) 2015, 2016
 # Kyle Markley.  All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,7 @@
 #
 
 NAME = opaque
-VERSION = 1.1.7
+VERSION = 1.1.8
 
 COMMON += -Iinclude
 COMMON += -std=c++11 -pedantic
