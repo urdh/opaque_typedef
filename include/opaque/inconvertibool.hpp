@@ -1,7 +1,7 @@
 #ifndef OPAQUE_INCONVERTIBOOL_HPP
 #define OPAQUE_INCONVERTIBOOL_HPP
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -32,8 +32,11 @@
 
 namespace opaque {
 
+/// \addtogroup typedefs
+/// @{
+
 ///
-/// Opaque boolean type which may be implicitly created from a bool, but not
+/// Safer boolean type.  May be implicitly created from a bool, but not
 /// from any other type, and which is not implicitly convertible to any type.
 ///
 /// This is a safer substitute for built-in bool if you are concerned about
@@ -58,6 +61,8 @@ constexpr inline bool operator==(bool b, const inconvertibool& i) noexcept {
 constexpr inline bool operator!=(bool b, const inconvertibool& i) noexcept {
   return b != i.value;
 }
+
+/// @}
 
 }
 
