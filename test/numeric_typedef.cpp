@@ -134,16 +134,18 @@ SUITE(creation) {
     CHECK_EQUAL(true, nothrow);
   }
 
+  struct multi_arg {
+    constexpr multi_arg(char arg_c, int arg_i) : c(arg_c), i(arg_i) { }
+    char c;
+    int i;
+  };
+
+  struct safe_multi : public numeric_typedef<multi_arg, safe_multi> {
+    using base = numeric_typedef<multi_arg, safe_multi>;
+    using base::base;
+  };
+
   TEST(multi_ctor) {
-    struct multi_arg {
-      constexpr multi_arg(char arg_c, int arg_i) : c(arg_c), i(arg_i) { }
-      char c;
-      int i;
-    };
-    struct safe_multi : public numeric_typedef<multi_arg, safe_multi> {
-      using base = numeric_typedef<multi_arg, safe_multi>;
-      using base::base;
-    };
     CHECK_EQUAL(true, std::is_constructible<safe_multi, char, int>::value);
     constexpr safe_multi m('a', 0);
     CHECK_EQUAL('a', m.value.c);
