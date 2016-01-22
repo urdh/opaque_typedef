@@ -69,7 +69,6 @@ template <typename V, typename R, typename S = unsigned>
 struct numeric_typedef_base : data<V,R> {
   using base = data<V,R>;
   using base::value;
-  using base::downcast;
   typedef V value_t;
   typedef R result_t;
   typedef S shift_t;
@@ -196,6 +195,7 @@ struct numeric_typedef_base : data<V,R> {
   numeric_typedef_base& operator=(      numeric_typedef_base&&) = default;
 protected:
   ~numeric_typedef_base() = default;
+  using base::downcast;
 };
 
 ///
