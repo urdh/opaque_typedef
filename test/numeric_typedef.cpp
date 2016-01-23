@@ -871,3 +871,11 @@ struct time_point : numeric_typedef_base<int, time_point>
     return *this;
   }
 };
+
+//
+// Explicit instantiations to verify the entire interface can be compiled
+//
+namespace opaque {
+  template struct numeric_typedef<int, time_duration>;
+  template struct numeric_typedef_base<int, time_point>;
+}
