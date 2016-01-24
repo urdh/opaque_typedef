@@ -108,6 +108,8 @@ normal/test/inconvertibool.so: normal/test/${DIR_SENTINEL} test/inconvertibool.c
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${NORMAL_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/inconvertibool.cpp
 normal/test/numeric_typedef.so: normal/test/${DIR_SENTINEL} test/numeric_typedef.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${NORMAL_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/numeric_typedef.cpp
+normal/test/string_typedef.so: normal/test/${DIR_SENTINEL} test/string_typedef.cpp
+	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${NORMAL_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/string_typedef.cpp
 normal/test/type_traits.so: normal/test/${DIR_SENTINEL} test/type_traits.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${NORMAL_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/type_traits.cpp
 normal/test_arrtest/test_evaluator.so: normal/test_arrtest/${DIR_SENTINEL} test_arrtest/test_evaluator.cpp
@@ -138,6 +140,8 @@ normal/inconvertibool: normal/${DIR_SENTINEL} normal/test/inconvertibool.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} normal/test/inconvertibool.so  ${COMMON_LINK} ${NORMAL_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 normal/numeric_typedef: normal/${DIR_SENTINEL} normal/test/numeric_typedef.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} normal/test/numeric_typedef.so  ${COMMON_LINK} ${NORMAL_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
+normal/string_typedef: normal/${DIR_SENTINEL} normal/test/string_typedef.so
+	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} normal/test/string_typedef.so  ${COMMON_LINK} ${NORMAL_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 normal/type_traits: normal/${DIR_SENTINEL} normal/test/type_traits.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} normal/test/type_traits.so  ${COMMON_LINK} ${NORMAL_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 normal/test_evaluator: normal/${DIR_SENTINEL} normal/test_arrtest/test_evaluator.so
@@ -152,10 +156,10 @@ normal/test_test_context: normal/${DIR_SENTINEL} normal/test_arrtest/test_test_c
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} normal/test_arrtest/test_test_context.so  ${COMMON_LINK} ${NORMAL_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 normal/test_type_name: normal/${DIR_SENTINEL} normal/test_arrtest/test_type_name.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} normal/test_arrtest/test_type_name.so  ${COMMON_LINK} ${NORMAL_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
-normal_dep = normal/example/demo_numeric_typedef.d normal/example/tutorial.d normal/test/binop_function.d normal/test/binop_inherit.d normal/test/binop_overload.d normal/test/convert.d normal/test/inconvertibool.d normal/test/numeric_typedef.d normal/test/type_traits.d normal/test_arrtest/test_evaluator.d normal/test_arrtest/test_ostreamable.d normal/test_arrtest/test_result_counter.d normal/test_arrtest/test_result_reporter.d normal/test_arrtest/test_test_context.d normal/test_arrtest/test_type_name.d
-normal_obj = normal/example/demo_numeric_typedef.so normal/example/tutorial.so normal/test/binop_function.so normal/test/binop_inherit.so normal/test/binop_overload.so normal/test/convert.so normal/test/inconvertibool.so normal/test/numeric_typedef.so normal/test/type_traits.so normal/test_arrtest/test_evaluator.so normal/test_arrtest/test_ostreamable.so normal/test_arrtest/test_result_counter.so normal/test_arrtest/test_result_reporter.so normal/test_arrtest/test_test_context.so normal/test_arrtest/test_type_name.so
+normal_dep = normal/example/demo_numeric_typedef.d normal/example/tutorial.d normal/test/binop_function.d normal/test/binop_inherit.d normal/test/binop_overload.d normal/test/convert.d normal/test/inconvertibool.d normal/test/numeric_typedef.d normal/test/string_typedef.d normal/test/type_traits.d normal/test_arrtest/test_evaluator.d normal/test_arrtest/test_ostreamable.d normal/test_arrtest/test_result_counter.d normal/test_arrtest/test_result_reporter.d normal/test_arrtest/test_test_context.d normal/test_arrtest/test_type_name.d
+normal_obj = normal/example/demo_numeric_typedef.so normal/example/tutorial.so normal/test/binop_function.so normal/test/binop_inherit.so normal/test/binop_overload.so normal/test/convert.so normal/test/inconvertibool.so normal/test/numeric_typedef.so normal/test/string_typedef.so normal/test/type_traits.so normal/test_arrtest/test_evaluator.so normal/test_arrtest/test_ostreamable.so normal/test_arrtest/test_result_counter.so normal/test_arrtest/test_result_reporter.so normal/test_arrtest/test_test_context.so normal/test_arrtest/test_type_name.so
 normal_lib = 
-normal_bin = normal/demo_numeric_typedef normal/tutorial normal/binop_function normal/binop_inherit normal/binop_overload normal/convert normal/inconvertibool normal/numeric_typedef normal/type_traits normal/test_evaluator normal/test_ostreamable normal/test_result_counter normal/test_result_reporter normal/test_test_context normal/test_type_name
+normal_bin = normal/demo_numeric_typedef normal/tutorial normal/binop_function normal/binop_inherit normal/binop_overload normal/convert normal/inconvertibool normal/numeric_typedef normal/string_typedef normal/type_traits normal/test_evaluator normal/test_ostreamable normal/test_result_counter normal/test_result_reporter normal/test_test_context normal/test_type_name
 normal/obj: ${normal_obj}
 normal/lib:
 normal/bin: ${normal_bin}
@@ -179,6 +183,8 @@ debug/test/inconvertibool.so: debug/test/${DIR_SENTINEL} test/inconvertibool.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${DEBUG_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/inconvertibool.cpp
 debug/test/numeric_typedef.so: debug/test/${DIR_SENTINEL} test/numeric_typedef.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${DEBUG_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/numeric_typedef.cpp
+debug/test/string_typedef.so: debug/test/${DIR_SENTINEL} test/string_typedef.cpp
+	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${DEBUG_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/string_typedef.cpp
 debug/test/type_traits.so: debug/test/${DIR_SENTINEL} test/type_traits.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${DEBUG_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/type_traits.cpp
 debug/test_arrtest/test_evaluator.so: debug/test_arrtest/${DIR_SENTINEL} test_arrtest/test_evaluator.cpp
@@ -209,6 +215,8 @@ debug/inconvertibool: debug/${DIR_SENTINEL} debug/test/inconvertibool.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} debug/test/inconvertibool.so  ${COMMON_LINK} ${DEBUG_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 debug/numeric_typedef: debug/${DIR_SENTINEL} debug/test/numeric_typedef.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} debug/test/numeric_typedef.so  ${COMMON_LINK} ${DEBUG_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
+debug/string_typedef: debug/${DIR_SENTINEL} debug/test/string_typedef.so
+	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} debug/test/string_typedef.so  ${COMMON_LINK} ${DEBUG_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 debug/type_traits: debug/${DIR_SENTINEL} debug/test/type_traits.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} debug/test/type_traits.so  ${COMMON_LINK} ${DEBUG_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 debug/test_evaluator: debug/${DIR_SENTINEL} debug/test_arrtest/test_evaluator.so
@@ -223,10 +231,10 @@ debug/test_test_context: debug/${DIR_SENTINEL} debug/test_arrtest/test_test_cont
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} debug/test_arrtest/test_test_context.so  ${COMMON_LINK} ${DEBUG_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 debug/test_type_name: debug/${DIR_SENTINEL} debug/test_arrtest/test_type_name.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} debug/test_arrtest/test_type_name.so  ${COMMON_LINK} ${DEBUG_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
-debug_dep = debug/example/demo_numeric_typedef.d debug/example/tutorial.d debug/test/binop_function.d debug/test/binop_inherit.d debug/test/binop_overload.d debug/test/convert.d debug/test/inconvertibool.d debug/test/numeric_typedef.d debug/test/type_traits.d debug/test_arrtest/test_evaluator.d debug/test_arrtest/test_ostreamable.d debug/test_arrtest/test_result_counter.d debug/test_arrtest/test_result_reporter.d debug/test_arrtest/test_test_context.d debug/test_arrtest/test_type_name.d
-debug_obj = debug/example/demo_numeric_typedef.so debug/example/tutorial.so debug/test/binop_function.so debug/test/binop_inherit.so debug/test/binop_overload.so debug/test/convert.so debug/test/inconvertibool.so debug/test/numeric_typedef.so debug/test/type_traits.so debug/test_arrtest/test_evaluator.so debug/test_arrtest/test_ostreamable.so debug/test_arrtest/test_result_counter.so debug/test_arrtest/test_result_reporter.so debug/test_arrtest/test_test_context.so debug/test_arrtest/test_type_name.so
+debug_dep = debug/example/demo_numeric_typedef.d debug/example/tutorial.d debug/test/binop_function.d debug/test/binop_inherit.d debug/test/binop_overload.d debug/test/convert.d debug/test/inconvertibool.d debug/test/numeric_typedef.d debug/test/string_typedef.d debug/test/type_traits.d debug/test_arrtest/test_evaluator.d debug/test_arrtest/test_ostreamable.d debug/test_arrtest/test_result_counter.d debug/test_arrtest/test_result_reporter.d debug/test_arrtest/test_test_context.d debug/test_arrtest/test_type_name.d
+debug_obj = debug/example/demo_numeric_typedef.so debug/example/tutorial.so debug/test/binop_function.so debug/test/binop_inherit.so debug/test/binop_overload.so debug/test/convert.so debug/test/inconvertibool.so debug/test/numeric_typedef.so debug/test/string_typedef.so debug/test/type_traits.so debug/test_arrtest/test_evaluator.so debug/test_arrtest/test_ostreamable.so debug/test_arrtest/test_result_counter.so debug/test_arrtest/test_result_reporter.so debug/test_arrtest/test_test_context.so debug/test_arrtest/test_type_name.so
 debug_lib = 
-debug_bin = debug/demo_numeric_typedef debug/tutorial debug/binop_function debug/binop_inherit debug/binop_overload debug/convert debug/inconvertibool debug/numeric_typedef debug/type_traits debug/test_evaluator debug/test_ostreamable debug/test_result_counter debug/test_result_reporter debug/test_test_context debug/test_type_name
+debug_bin = debug/demo_numeric_typedef debug/tutorial debug/binop_function debug/binop_inherit debug/binop_overload debug/convert debug/inconvertibool debug/numeric_typedef debug/string_typedef debug/type_traits debug/test_evaluator debug/test_ostreamable debug/test_result_counter debug/test_result_reporter debug/test_test_context debug/test_type_name
 debug/obj: ${debug_obj}
 debug/lib:
 debug/bin: ${debug_bin}
@@ -250,6 +258,8 @@ profile/test/inconvertibool.so: profile/test/${DIR_SENTINEL} test/inconvertibool
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${PROFILE_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/inconvertibool.cpp
 profile/test/numeric_typedef.so: profile/test/${DIR_SENTINEL} test/numeric_typedef.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${PROFILE_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/numeric_typedef.cpp
+profile/test/string_typedef.so: profile/test/${DIR_SENTINEL} test/string_typedef.cpp
+	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${PROFILE_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/string_typedef.cpp
 profile/test/type_traits.so: profile/test/${DIR_SENTINEL} test/type_traits.cpp
 	${CXX} ${TARGET} $@ ${DEPS} ${COMMON_FLAG} ${PROFILE_FLAG} ${SHARED_FLAG} ${TEST_FLAG} ${CPPFLAGS} ${CXXFLAGS} test/type_traits.cpp
 profile/test_arrtest/test_evaluator.so: profile/test_arrtest/${DIR_SENTINEL} test_arrtest/test_evaluator.cpp
@@ -280,6 +290,8 @@ profile/inconvertibool: profile/${DIR_SENTINEL} profile/test/inconvertibool.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} profile/test/inconvertibool.so  ${COMMON_LINK} ${PROFILE_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 profile/numeric_typedef: profile/${DIR_SENTINEL} profile/test/numeric_typedef.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} profile/test/numeric_typedef.so  ${COMMON_LINK} ${PROFILE_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
+profile/string_typedef: profile/${DIR_SENTINEL} profile/test/string_typedef.so
+	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} profile/test/string_typedef.so  ${COMMON_LINK} ${PROFILE_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 profile/type_traits: profile/${DIR_SENTINEL} profile/test/type_traits.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} profile/test/type_traits.so  ${COMMON_LINK} ${PROFILE_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 profile/test_evaluator: profile/${DIR_SENTINEL} profile/test_arrtest/test_evaluator.so
@@ -294,10 +306,10 @@ profile/test_test_context: profile/${DIR_SENTINEL} profile/test_arrtest/test_tes
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} profile/test_arrtest/test_test_context.so  ${COMMON_LINK} ${PROFILE_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
 profile/test_type_name: profile/${DIR_SENTINEL} profile/test_arrtest/test_type_name.so
 	${CXX} ${TARGET} $@ ${CPPFLAGS} ${CXXFLAGS} ${LDFLAGS} profile/test_arrtest/test_type_name.so  ${COMMON_LINK} ${PROFILE_LINK} ${SHARED_LINK} ${TEST_LINK} ${LDLIBS}
-profile_dep = profile/example/demo_numeric_typedef.d profile/example/tutorial.d profile/test/binop_function.d profile/test/binop_inherit.d profile/test/binop_overload.d profile/test/convert.d profile/test/inconvertibool.d profile/test/numeric_typedef.d profile/test/type_traits.d profile/test_arrtest/test_evaluator.d profile/test_arrtest/test_ostreamable.d profile/test_arrtest/test_result_counter.d profile/test_arrtest/test_result_reporter.d profile/test_arrtest/test_test_context.d profile/test_arrtest/test_type_name.d
-profile_obj = profile/example/demo_numeric_typedef.so profile/example/tutorial.so profile/test/binop_function.so profile/test/binop_inherit.so profile/test/binop_overload.so profile/test/convert.so profile/test/inconvertibool.so profile/test/numeric_typedef.so profile/test/type_traits.so profile/test_arrtest/test_evaluator.so profile/test_arrtest/test_ostreamable.so profile/test_arrtest/test_result_counter.so profile/test_arrtest/test_result_reporter.so profile/test_arrtest/test_test_context.so profile/test_arrtest/test_type_name.so
+profile_dep = profile/example/demo_numeric_typedef.d profile/example/tutorial.d profile/test/binop_function.d profile/test/binop_inherit.d profile/test/binop_overload.d profile/test/convert.d profile/test/inconvertibool.d profile/test/numeric_typedef.d profile/test/string_typedef.d profile/test/type_traits.d profile/test_arrtest/test_evaluator.d profile/test_arrtest/test_ostreamable.d profile/test_arrtest/test_result_counter.d profile/test_arrtest/test_result_reporter.d profile/test_arrtest/test_test_context.d profile/test_arrtest/test_type_name.d
+profile_obj = profile/example/demo_numeric_typedef.so profile/example/tutorial.so profile/test/binop_function.so profile/test/binop_inherit.so profile/test/binop_overload.so profile/test/convert.so profile/test/inconvertibool.so profile/test/numeric_typedef.so profile/test/string_typedef.so profile/test/type_traits.so profile/test_arrtest/test_evaluator.so profile/test_arrtest/test_ostreamable.so profile/test_arrtest/test_result_counter.so profile/test_arrtest/test_result_reporter.so profile/test_arrtest/test_test_context.so profile/test_arrtest/test_type_name.so
 profile_lib = 
-profile_bin = profile/demo_numeric_typedef profile/tutorial profile/binop_function profile/binop_inherit profile/binop_overload profile/convert profile/inconvertibool profile/numeric_typedef profile/type_traits profile/test_evaluator profile/test_ostreamable profile/test_result_counter profile/test_result_reporter profile/test_test_context profile/test_type_name
+profile_bin = profile/demo_numeric_typedef profile/tutorial profile/binop_function profile/binop_inherit profile/binop_overload profile/convert profile/inconvertibool profile/numeric_typedef profile/string_typedef profile/type_traits profile/test_evaluator profile/test_ostreamable profile/test_result_counter profile/test_result_reporter profile/test_test_context profile/test_type_name
 profile/obj: ${profile_obj}
 profile/lib:
 profile/bin: ${profile_bin}

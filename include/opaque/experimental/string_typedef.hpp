@@ -49,7 +49,9 @@ namespace experimental {
 ///
 template <typename S, typename R>
 struct string_typedef : data<S,R> {
+private:
   using base = opaque::data<S,R>;
+public:
   using typename base::underlying_type;
   using typename base::opaque_type;
   using base::value;
@@ -75,22 +77,33 @@ private:
 public:
 
   //
-  // Construction from underlying_type
+  // Constructor philosophy
   //
+  // 1) Provide for explicit construction from an instance of underlying_type.
+  //
+  // 2) Constructors that have an argument of underlying_type are provided in
+  //    in two flavors: an explicit one taking underlying_type, and one taking
+  //    opaque_type that has the explicitness of the original.
+  //
+  // 3) Constructors that do not have an argument of underlying_type are made
+  //    explicit.
+  //
+
   explicit string_typedef(const underlying_type&  str) noexcept
     : base(str) { }
   explicit string_typedef(      underlying_type&& str) noexcept
     : base(std::move(str)) { }
 
   //
-  // Make explicit all of the underlying_type's constructors
-  //
   // The default constructor has the C++14 interface; a zero-argument
   // form (defaulted below) and a single-argument form taking an Allocator.
   //
   explicit string_typedef(const Allocator& a)
     : base(a) { }
-  explicit string_typedef(const opaque_type& str, size_type pos,
+  explicit string_typedef(const underlying_type& str, size_type pos,
+      size_type n = npos, const Allocator& a = Allocator())
+    : base(str.value, pos, n, a) { }
+  string_typedef(const opaque_type& str, size_type pos,
       size_type n = npos, const Allocator& a = Allocator())
     : base(str.value, pos, n, a) { }
   explicit string_typedef(const charT* s, size_type n,
@@ -108,9 +121,13 @@ public:
   explicit string_typedef(std::initializer_list<charT> il,
       const Allocator& a = Allocator())
     : base(il, a) { }
-  explicit string_typedef(const opaque_type& str, const Allocator& a)
+  explicit string_typedef(const underlying_type& str, const Allocator& a)
     : base(str.value, a) { }
-  explicit string_typedef(opaque_type&& str, const Allocator& a)
+  explicit string_typedef(underlying_type&& str, const Allocator& a)
+    : base(std::move(str.value), a) { }
+  string_typedef(const opaque_type& str, const Allocator& a)
+    : base(str.value, a) { }
+  string_typedef(opaque_type&& str, const Allocator& a)
     : base(std::move(str.value), a) { }
 
   opaque_type& operator=(const charT* s) {
@@ -269,6 +286,19 @@ public:
     value.insert(pos, n, c);
     return downcast();
   }
+  // C++03 interface
+  iterator insert(iterator p, charT c) {
+    return insert(p, c);
+  }
+  // C++03 interface
+  iterator insert(iterator p, size_type n, charT c) {
+    return insert(p, n, c);
+  }
+  // C++03 interface
+  template <class InputIterator>
+  iterator insert(iterator p, InputIterator first, InputIterator last) {
+    return insert(p, first, last);
+  }
   iterator insert(const_iterator p, charT c) {
     return insert(p, c);
   }
@@ -286,6 +316,14 @@ public:
   opaque_type& erase(size_type pos = 0, size_type n = npos) {
     value.erase(pos, n);
     return downcast();
+  }
+  // C++03 interface
+  iterator erase(iterator p) {
+    return value.erase(p);
+  }
+  // C++03 interface
+  iterator erase(iterator first, iterator last) {
+    return value.erase(first, last);
   }
   iterator erase(const_iterator p) {
     return value.erase(p);
@@ -573,18 +611,6 @@ protected:
 /// @}
 
 }
-}
-
-namespace std {
-  template <class T> struct hash;
-  template <typename S, typename R>
-  struct hash<opaque::experimental::string_typedef<S,R>> {
-    using argument_type = opaque::experimental::string_typedef<S,R>;
-    using result_type = size_t;
-    result_type operator()(const argument_type& key) const {
-      return std::hash<S>{}(key.value);
-    }
-  };
 }
 
 #endif

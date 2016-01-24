@@ -100,6 +100,7 @@ check: test
 	normal/binop_inherit
 	normal/numeric_typedef
 	normal/inconvertibool
+	normal/string_typedef
 
 everything: doc
 
