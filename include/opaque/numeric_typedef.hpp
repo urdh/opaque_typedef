@@ -67,117 +67,118 @@ namespace opaque {
 ///
 template <typename V, typename R, typename S = unsigned>
 struct numeric_typedef_base : data<V,R> {
-  using base = data<V,R>;
+private:
+  using base = opaque::data<V,R>;
+public:
+  using typename base::underlying_type;
+  using typename base::opaque_type;
+  typedef S shift_type;
   using base::value;
-  typedef V value_t;
-  typedef R result_t;
-  typedef S shift_t;
-  typedef numeric_typedef_base<V,R,S> self_t;
 
-  constexpr14 result_t& operator*=(const result_t& peer)
+  constexpr14 opaque_type& operator*=(const opaque_type& peer)
     noexcept(noexcept( value *= peer.value )) {
                        value *= peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator/=(const result_t& peer)
+  constexpr14 opaque_type& operator/=(const opaque_type& peer)
     noexcept(noexcept( value /= peer.value )) {
                        value /= peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator%=(const result_t& peer)
+  constexpr14 opaque_type& operator%=(const opaque_type& peer)
     noexcept(noexcept( value %= peer.value )) {
                        value %= peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator+=(const result_t& peer)
+  constexpr14 opaque_type& operator+=(const opaque_type& peer)
     noexcept(noexcept( value += peer.value )) {
                        value += peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator-=(const result_t& peer)
+  constexpr14 opaque_type& operator-=(const opaque_type& peer)
     noexcept(noexcept( value -= peer.value )) {
                        value -= peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator<<=(const shift_t& count)
+  constexpr14 opaque_type& operator<<=(const shift_type& count)
     noexcept(noexcept( value <<= count )) {
                        value <<= count;
     return downcast(); }
 
-  constexpr14 result_t& operator>>=(const shift_t& count)
+  constexpr14 opaque_type& operator>>=(const shift_type& count)
     noexcept(noexcept( value >>= count )) {
                        value >>= count;
     return downcast(); }
 
-  constexpr14 result_t& operator&=(const result_t& peer)
+  constexpr14 opaque_type& operator&=(const opaque_type& peer)
     noexcept(noexcept( value &= peer.value )) {
                        value &= peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator^=(const result_t& peer)
+  constexpr14 opaque_type& operator^=(const opaque_type& peer)
     noexcept(noexcept( value ^= peer.value )) {
                        value ^= peer.value;
     return downcast(); }
 
-  constexpr14 result_t& operator|=(const result_t& peer)
+  constexpr14 opaque_type& operator|=(const opaque_type& peer)
     noexcept(noexcept( value |= peer.value )) {
                        value |= peer.value;
     return downcast(); }
 
 
-  constexpr14 result_t& operator++()
+  constexpr14 opaque_type& operator++()
     noexcept(noexcept( ++value )) {
                        ++value;
     return downcast(); }
 
-  constexpr14 result_t& operator--()
+  constexpr14 opaque_type& operator--()
     noexcept(noexcept( --value )) {
                        --value;
     return downcast(); }
 
-  constexpr14 result_t operator++(int) noexcept(noexcept(
-        std::declval<self_t&>().operator++()) and
-        std::is_nothrow_constructible<result_t, value_t>::value) {
-    result_t r(value); operator++(); return r; }
+  constexpr14 opaque_type operator++(int) noexcept(noexcept(
+        std::declval<numeric_typedef_base&>().operator++()) and
+        std::is_nothrow_constructible<opaque_type, underlying_type>::value) {
+    opaque_type r(value); operator++(); return r; }
 
-  constexpr14 result_t operator--(int) noexcept(noexcept(
-        std::declval<self_t&>().operator--()) and
-        std::is_nothrow_constructible<result_t, value_t>::value) {
-    result_t r(value); operator--(); return r; }
+  constexpr14 opaque_type operator--(int) noexcept(noexcept(
+        std::declval<numeric_typedef_base&>().operator++()) and
+        std::is_nothrow_constructible<opaque_type, underlying_type>::value) {
+    opaque_type r(value); operator--(); return r; }
 
 
-  constexpr result_t operator+() const
-    noexcept(noexcept( result_t(+value) )) {
-    return             result_t(+value); }
+  constexpr opaque_type operator+() const
+    noexcept(noexcept( opaque_type(+value) )) {
+    return             opaque_type(+value); }
 
-  constexpr result_t operator-() const
-    noexcept(noexcept( result_t(-value) )) {
-    return             result_t(-value); }
+  constexpr opaque_type operator-() const
+    noexcept(noexcept( opaque_type(-value) )) {
+    return             opaque_type(-value); }
 
-  constexpr result_t operator~() const
-    noexcept(noexcept( result_t(~value) )) {
-    return             result_t(~value); }
+  constexpr opaque_type operator~() const
+    noexcept(noexcept( opaque_type(~value) )) {
+    return             opaque_type(~value); }
 
   constexpr bool     operator!() const
     noexcept(noexcept( !value  )) {
     return             !value;  }
 
-  constexpr bool operator==(const result_t& peer) const
+  constexpr bool operator==(const opaque_type& peer) const
     noexcept(noexcept( value == peer.value )) {
                 return value == peer.value; }
-  constexpr bool operator!=(const result_t& peer) const
+  constexpr bool operator!=(const opaque_type& peer) const
     noexcept(noexcept( value != peer.value )) {
                 return value != peer.value; }
-  constexpr bool operator< (const result_t& peer) const
+  constexpr bool operator< (const opaque_type& peer) const
     noexcept(noexcept( value <  peer.value )) {
                 return value <  peer.value; }
-  constexpr bool operator> (const result_t& peer) const
+  constexpr bool operator> (const opaque_type& peer) const
     noexcept(noexcept( value >  peer.value )) {
                 return value >  peer.value; }
-  constexpr bool operator<=(const result_t& peer) const
+  constexpr bool operator<=(const opaque_type& peer) const
     noexcept(noexcept( value <= peer.value )) {
                 return value <= peer.value; }
-  constexpr bool operator>=(const result_t& peer) const
+  constexpr bool operator>=(const opaque_type& peer) const
     noexcept(noexcept( value >= peer.value )) {
                 return value >= peer.value; }
 
@@ -230,8 +231,7 @@ struct numeric_typedef : numeric_typedef_base<V,R,S>
   , binop::bitxorable     <R>
   , binop::bitorable      <R>
 {
-  using base = numeric_typedef_base<V,R,S>;
-  using base::base;
+  using numeric_typedef_base<V,R,S>::numeric_typedef_base;
   explicit numeric_typedef() = default;
   numeric_typedef(const numeric_typedef& ) = default;
   numeric_typedef(      numeric_typedef&&) = default;
