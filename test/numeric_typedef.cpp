@@ -155,7 +155,6 @@ SUITE(creation) {
   TEST(dtor) {
     CHECK_EQUAL(true , std::is_destructible<safe_int              >::value);
     CHECK_EQUAL(false, std::is_destructible<safe_int::base        >::value);
-    CHECK_EQUAL(false, std::is_destructible<safe_int::base::self_t>::value);
   }
 
 }
