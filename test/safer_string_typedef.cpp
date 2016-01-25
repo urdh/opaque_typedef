@@ -1,7 +1,5 @@
-#ifndef OPAQUE_HPP
-#define OPAQUE_HPP
 //
-// Copyright (c) 2015
+// Copyright (c) 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,47 +26,36 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+#include "opaque/experimental/safer_string_typedef.hpp"
+#include "arrtest/arrtest.hpp"
 
-///
-/// Opaque Typedefs
-///
-/// Types intended for wrapping other types, used instead of simple type
-/// aliases.
-///
-namespace opaque {
+using namespace std;
+using namespace opaque;
 
-///
-/// Binary Operators
-///
-/// Machinery enabling inheritance of configurable operator@ based on
-/// operator@=.
-///
-namespace binop { }
+UNIT_TEST_MAIN
 
-///
-/// Experimental Opaque Typedefs
-///
-/// Opaque typedefs that may be useful but have not been used enough to
-/// have confidence that their definition and interface is correct.
-///
-namespace experimental { }
+struct a_string
+  : opaque::experimental::safer_string_typedef<std::string, a_string>
+{
+  using base = opaque::experimental::safer_string_typedef<std::string, a_string>;
+  using base::base;
+};
 
+SUITE(construction) {
+  TEST(ctor_traits) {
+    CHECK_EQUAL(true , std::is_constructible<a_string, std::string>::value);
+    CHECK_EQUAL(false, std::is_convertible<std::string, a_string>::value);
+    CHECK_EQUAL(true , std::is_constructible<a_string, const char *>::value);
+    CHECK_EQUAL(false, std::is_convertible<const char *, a_string>::value);
+  }
+
+  TEST(ctor_examples) {
+    const std::string empty;
+    const std::string str("hi");
+    a_string a;
+    a_string b(str);
+    a_string c(std::string("hi"));
+    CHECK_EQUAL(a.value, empty);
+    CHECK_EQUAL(b, c);
+  }
 }
-
-///
-/// \defgroup internal Internal implementation details
-///
-/// Internal implementation details not intended to be directly reused.
-///
-
-///
-/// \defgroup miscellaneous Miscellaneous Utilities
-///
-/// Internal implementation details that may be useful to reuse directly.
-///
-
-///
-/// \defgroup typedefs Opaque typedefs
-///
-
-#endif

@@ -98,9 +98,12 @@ check: test
 	normal/binop_function
 	normal/binop_overload
 	normal/binop_inherit
+	normal/ostream
 	normal/numeric_typedef
 	normal/inconvertibool
+	normal/safer_string_typedef
 	normal/string_typedef
+	normal/hash
 
 everything: doc
 
