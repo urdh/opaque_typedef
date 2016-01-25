@@ -26,34 +26,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
+#include "opaque/numeric_typedef.hpp"
 #include "opaque/experimental/string_typedef.hpp"
+#include "opaque/hash.hpp"
 #include "arrtest/arrtest.hpp"
-
-using namespace std;
-using namespace opaque;
+#include <unordered_set>
 
 UNIT_TEST_MAIN
+
+struct safe_int : opaque::numeric_typedef<int, safe_int> {
+  using base = opaque::numeric_typedef<int, safe_int>;
+  using base::base;
+};
 
 struct a_string : opaque::experimental::string_typedef<std::string, a_string> {
   using base = opaque::experimental::string_typedef<std::string, a_string>;
   using base::base;
 };
 
-SUITE(construction) {
-  TEST(ctor_traits) {
-    CHECK_EQUAL(true , std::is_constructible<a_string, std::string>::value);
-    CHECK_EQUAL(false, std::is_convertible<std::string, a_string>::value);
-    CHECK_EQUAL(true , std::is_constructible<a_string, const char *>::value);
-    CHECK_EQUAL(false, std::is_convertible<const char *, a_string>::value);
-  }
+OPAQUE_HASHABLE(safe_int)
+OPAQUE_HASHABLE(a_string)
 
-  TEST(ctor_examples) {
-    const std::string empty;
-    const std::string str("hi");
-    a_string a;
-    a_string b(str);
-    a_string c(std::string("hi"));
-    CHECK_EQUAL(a.value, empty);
-    CHECK_EQUAL(b, c);
-  }
+TEST(numeric) {
+  std::unordered_set<safe_int> s;
+  s.emplace(5);
+}
+
+TEST(string) {
+  std::unordered_set<a_string> s;
+  s.emplace("Hello");
 }

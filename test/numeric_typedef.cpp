@@ -27,6 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 #include "opaque/numeric_typedef.hpp"
+#include "opaque/ostream.hpp"
 #include "arrtest/arrtest.hpp"
 #include <iostream>
 #include <sstream>
@@ -37,14 +38,8 @@ using namespace opaque;
 UNIT_TEST_MAIN
 
 template <typename... TP>
-std::ostream&
-operator<<(std::ostream& stream, const numeric_typedef_base<TP...>& v) {
-  return stream << v.value;
-}
-
-template <typename... TP>
 std::istream&
-operator>>(std::istream& stream,       numeric_typedef_base<TP...>& v) {
+operator>>(std::istream& stream, opaque::data<TP...>& v) {
   return stream >> v.value;
 }
 

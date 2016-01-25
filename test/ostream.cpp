@@ -26,34 +26,20 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-#include "opaque/experimental/string_typedef.hpp"
+#include "opaque/ostream.hpp"
 #include "arrtest/arrtest.hpp"
-
-using namespace std;
-using namespace opaque;
+#include <sstream>
 
 UNIT_TEST_MAIN
 
-struct a_string : opaque::experimental::string_typedef<std::string, a_string> {
-  using base = opaque::experimental::string_typedef<std::string, a_string>;
+struct store : opaque::data<int, store> {
+  using base = opaque::data<int, store>;
   using base::base;
 };
 
-SUITE(construction) {
-  TEST(ctor_traits) {
-    CHECK_EQUAL(true , std::is_constructible<a_string, std::string>::value);
-    CHECK_EQUAL(false, std::is_convertible<std::string, a_string>::value);
-    CHECK_EQUAL(true , std::is_constructible<a_string, const char *>::value);
-    CHECK_EQUAL(false, std::is_convertible<const char *, a_string>::value);
-  }
-
-  TEST(ctor_examples) {
-    const std::string empty;
-    const std::string str("hi");
-    a_string a;
-    a_string b(str);
-    a_string c(std::string("hi"));
-    CHECK_EQUAL(a.value, empty);
-    CHECK_EQUAL(b, c);
-  }
+TEST(everything) {
+  store x(5);
+  std::ostringstream s;
+  s << x;
+  CHECK_EQUAL("5", s.str());
 }

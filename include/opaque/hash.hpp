@@ -1,3 +1,5 @@
+#ifndef OPAQUE_HASH_HPP
+#define OPAQUE_HASH_HPP
 //
 // Copyright (c) 2016
 // Kyle Markley.  All rights reserved.
@@ -26,34 +28,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-#include "opaque/experimental/string_typedef.hpp"
-#include "arrtest/arrtest.hpp"
+#include "data.hpp"
 
-using namespace std;
-using namespace opaque;
+/// \addtogroup miscellaneous
+/// @{
 
-UNIT_TEST_MAIN
-
-struct a_string : opaque::experimental::string_typedef<std::string, a_string> {
-  using base = opaque::experimental::string_typedef<std::string, a_string>;
-  using base::base;
-};
-
-SUITE(construction) {
-  TEST(ctor_traits) {
-    CHECK_EQUAL(true , std::is_constructible<a_string, std::string>::value);
-    CHECK_EQUAL(false, std::is_convertible<std::string, a_string>::value);
-    CHECK_EQUAL(true , std::is_constructible<a_string, const char *>::value);
-    CHECK_EQUAL(false, std::is_convertible<const char *, a_string>::value);
-  }
-
-  TEST(ctor_examples) {
-    const std::string empty;
-    const std::string str("hi");
-    a_string a;
-    a_string b(str);
-    a_string c(std::string("hi"));
-    CHECK_EQUAL(a.value, empty);
-    CHECK_EQUAL(b, c);
-  }
+///
+/// Create a std::hash specialization for an opaque typedef
+///
+/// This macro must be used outside any namespace, because it creates a
+/// specialization in std.
+///
+#define OPAQUE_HASHABLE(name) \
+namespace std {\
+  template <class T> struct hash;\
+  template <> struct hash<name> {\
+    using argument_type = typename name::opaque_type;\
+    using result_type = size_t;\
+    result_type operator()(const argument_type& key) const {\
+      return std::hash<typename name::underlying_type>{}(key.value);\
+    }\
+  };\
 }
+
+/// @}
+
+#endif

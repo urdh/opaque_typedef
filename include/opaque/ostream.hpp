@@ -1,3 +1,5 @@
+#ifndef OPAQUE_OSTREAM_HPP
+#define OPAQUE_OSTREAM_HPP
 //
 // Copyright (c) 2016
 // Kyle Markley.  All rights reserved.
@@ -26,34 +28,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-#include "opaque/experimental/string_typedef.hpp"
-#include "arrtest/arrtest.hpp"
+#include "data.hpp"
+#include <ostream>
 
-using namespace std;
-using namespace opaque;
+namespace opaque {
 
-UNIT_TEST_MAIN
+/// \addtogroup miscellaneous
+/// @{
 
-struct a_string : opaque::experimental::string_typedef<std::string, a_string> {
-  using base = opaque::experimental::string_typedef<std::string, a_string>;
-  using base::base;
-};
-
-SUITE(construction) {
-  TEST(ctor_traits) {
-    CHECK_EQUAL(true , std::is_constructible<a_string, std::string>::value);
-    CHECK_EQUAL(false, std::is_convertible<std::string, a_string>::value);
-    CHECK_EQUAL(true , std::is_constructible<a_string, const char *>::value);
-    CHECK_EQUAL(false, std::is_convertible<const char *, a_string>::value);
-  }
-
-  TEST(ctor_examples) {
-    const std::string empty;
-    const std::string str("hi");
-    a_string a;
-    a_string b(str);
-    a_string c(std::string("hi"));
-    CHECK_EQUAL(a.value, empty);
-    CHECK_EQUAL(b, c);
-  }
+///
+/// std::ostream compatibility for all opaque typedefs
+///
+template <typename... TP> 
+std::ostream& operator<<(std::ostream& stream, const opaque::data<TP...>& d) {
+  return stream << d.value;
 }
+
+/// @}
+
+}
+
+#endif
