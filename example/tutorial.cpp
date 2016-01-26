@@ -64,17 +64,18 @@ struct address : opaque::numeric_typedef_base<T, address<T>>
 };
 
 //
-// Same as address, but using opaque::experimental::point_typedef to define
+// Same as address, but using opaque::experimental::position_typedef to define
 // the + and - operators, and get the desired flavors of += and -=.
 //
-#include "opaque/experimental/point_typedef.hpp"
+#include "opaque/experimental/position_typedef.hpp"
 template <typename T>
-struct alt_address
-  : opaque::experimental::point_typedef<offset<T>, alt_address<T>>
+struct position
+  : opaque::experimental::position_typedef<offset<T>, position<T>>
 {
-  using base = opaque::experimental::point_typedef<offset<T>, alt_address<T>>;
+  using base =
+    opaque::experimental::position_typedef<offset<T>, position<T>>;
   using base::base;
-  alt_address& operator*=(const alt_address&) = delete;
+  position& operator*=(const position&) = delete;
 };
 
 int main() {
@@ -82,9 +83,9 @@ int main() {
   std::cout << "myint(1) << 4: " << (x<<4) << "\n";
   constexpr offset<unsigned> o(3u);
   address<unsigned> a(2u);
-  constexpr alt_address<unsigned> l(7u);
+  constexpr position<unsigned> l(7u);
   auto sum1 = a + o;
   constexpr14 auto sum2 = l + o;
   std::cout << "address(2) + offset(3): " << sum1 << "\n";
-  std::cout << "address(7) + offset(3): " << sum2 << "\n";
+  std::cout << "position(7) + offset(3): " << sum2 << "\n";
 }
