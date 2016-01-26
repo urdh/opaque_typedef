@@ -65,10 +65,10 @@ namespace opaque {
 /// them in your subclass.  (Note that it is simpler to delete an unwanted
 /// operation than to supply a missing one that is desired.)
 ///
-template <typename V, typename R, typename S = unsigned>
-struct numeric_typedef_base : data<V,R> {
+template <typename U, typename O, typename S = unsigned>
+struct numeric_typedef_base : data<U,O> {
 private:
-  using base = opaque::data<V,R>;
+  using base = opaque::data<U,O>;
 public:
   using typename base::underlying_type;
   using typename base::opaque_type;
@@ -214,24 +214,24 @@ protected:
 /// represent all of them.
 ///
 /// Template arguments for numeric_typedef:
-///  -# V : The underlying type holding the value
-///  -# R : The result type, your subclass
+///  -# U : The underlying type holding the value
+///  -# O : The opaque type, your subclass
 ///  -# S : The right-hand operand type for shift operations
 ///
-template <typename V, typename R, typename S = unsigned>
-struct numeric_typedef : numeric_typedef_base<V,R,S>
-  , binop::multipliable   <R>
-  , binop::dividable      <R>
-  , binop::modulable      <R>
-  , binop::addable        <R>
-  , binop::subtractable   <R>
-  , binop::left_shiftable <R, false, R, S>
-  , binop::right_shiftable<R, false, R, S>
-  , binop::bitandable     <R>
-  , binop::bitxorable     <R>
-  , binop::bitorable      <R>
+template <typename U, typename O, typename S = unsigned>
+struct numeric_typedef : numeric_typedef_base<U,O,S>
+  , binop::multipliable   <O>
+  , binop::dividable      <O>
+  , binop::modulable      <O>
+  , binop::addable        <O>
+  , binop::subtractable   <O>
+  , binop::left_shiftable <O, false, O, S>
+  , binop::right_shiftable<O, false, O, S>
+  , binop::bitandable     <O>
+  , binop::bitxorable     <O>
+  , binop::bitorable      <O>
 {
-  using numeric_typedef_base<V,R,S>::numeric_typedef_base;
+  using numeric_typedef_base<U,O,S>::numeric_typedef_base;
   explicit numeric_typedef() = default;
   numeric_typedef(const numeric_typedef& ) = default;
   numeric_typedef(      numeric_typedef&&) = default;

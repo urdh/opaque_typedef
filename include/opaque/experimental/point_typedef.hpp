@@ -52,32 +52,37 @@ namespace experimental {
 ///
 /// Template arguments for point_typedef:
 ///  -# Span : The span type, which must be a numeric opaque typedef
-///  -# R : The result type, your subclass
+///  -# O : The opaque type, your subclass
 ///
-template <typename Span, typename R>
+template <typename Span, typename O>
 struct point_typedef
-  : numeric_typedef_base<typename Span::value_t, R, typename Span::shift_t>
-  , binop::addable     <R   , true , R   , Span>
-  , binop::addable     <R   , true , Span, R   >
-  , binop::subtractable<R   , false, R   , Span>
-  , binop::subtractable<Span, false, R   , R   ,
-                        typename Span::value_t, typename Span::value_t>
+  : numeric_typedef_base<typename Span::underlying_type, O,
+                         typename Span::shift_type>
+  , binop::addable     <O   , true , O   , Span>
+  , binop::addable     <O   , true , Span, O   >
+  , binop::subtractable<O   , false, O   , Span>
+  , binop::subtractable<Span, false, O   , O   ,
+                        typename Span::underlying_type,
+                        typename Span::underlying_type>
 {
+private:
   using base =
-    numeric_typedef_base<typename Span::value_t, R, typename Span::shift_t>;
+    numeric_typedef_base<typename Span::underlying_type, O,
+                         typename Span::shift_type>;
+public:
+  using typename base::underlying_type;
+  using typename base::opaque_type;
   using base::value;
-  using base::downcast;
-  typedef R result_t;
 
-  result_t& operator+=(const result_t&) = delete;
-  result_t& operator-=(const result_t&) = delete;
+  opaque_type& operator+=(const opaque_type&) = delete;
+  opaque_type& operator-=(const opaque_type&) = delete;
 
-  constexpr14 result_t& operator+=(const Span& s)
+  constexpr14 opaque_type& operator+=(const Span& s)
     noexcept(noexcept( value += s.value )) {
                        value += s.value;
     return downcast(); }
 
-  constexpr14 result_t& operator-=(const Span& s)
+  constexpr14 opaque_type& operator-=(const Span& s)
     noexcept(noexcept( value -= s.value )) {
                        value -= s.value;
     return downcast(); }
@@ -90,6 +95,7 @@ struct point_typedef
   point_typedef& operator=(      point_typedef&&) = default;
 protected:
   ~point_typedef() = default;
+  using base::downcast;
 };
 
 /// @}

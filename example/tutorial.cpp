@@ -27,6 +27,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 #include "opaque/numeric_typedef.hpp"
+#include "opaque/ostream.hpp"
 #include <iostream>
 
 struct myint : opaque::numeric_typedef<int, myint> {
@@ -52,28 +53,38 @@ struct address : opaque::numeric_typedef_base<T, address<T>>
   address& operator*=(const address&) = delete;
   address& operator+=(const address&) = delete;
   address& operator-=(const address&) = delete;
-  constexpr14 address& operator+=(const offset<T>& o) {
+  address& operator+=(const offset<T>& o) {
     this->value += o.value;
     return *this;
   }
-  constexpr14 address& operator-=(const offset<T>& o) {
+  address& operator-=(const offset<T>& o) {
     this->value -= o.value;
     return *this;
   }
 };
 
-// Provide output streaming for opaque typedefs
-template <typename... TP>
-std::ostream&
-operator<<(std::ostream& stream, const opaque::numeric_typedef_base<TP...>& v) {
-  return stream << v.value;
-}
+//
+// Same as address, but using opaque::experimental::point_typedef to define
+// the + and - operators, and get the desired flavors of += and -=.
+//
+#include "opaque/experimental/point_typedef.hpp"
+template <typename T>
+struct alt_address
+  : opaque::experimental::point_typedef<offset<T>, alt_address<T>>
+{
+  using base = opaque::experimental::point_typedef<offset<T>, alt_address<T>>;
+  using base::base;
+  alt_address& operator*=(const alt_address&) = delete;
+};
 
 int main() {
   myint x(1);
   std::cout << "myint(1) << 4: " << (x<<4) << "\n";
-  constexpr address<unsigned> a(2u);
   constexpr offset<unsigned> o(3u);
-  constexpr14 auto sum = a + o;
-  std::cout << "address(2) + offset(3): " << sum << "\n";
+  address<unsigned> a(2u);
+  constexpr alt_address<unsigned> l(7u);
+  auto sum1 = a + o;
+  constexpr14 auto sum2 = l + o;
+  std::cout << "address(2) + offset(3): " << sum1 << "\n";
+  std::cout << "address(7) + offset(3): " << sum2 << "\n";
 }
