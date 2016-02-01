@@ -50,7 +50,7 @@ COMMON_LINK += -lpthread
  NORMAL_LINK = -s
   DEBUG_FLAG += -O0 -ggdb3
   DEBUG_LINK =
-PROFILE_FLAG += -pg --coverage
+PROFILE_FLAG += -O3 -pg --coverage
 PROFILE_LINK = -lgcov
 
 STATIC_FLAG =
