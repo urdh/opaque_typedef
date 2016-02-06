@@ -77,12 +77,12 @@ public:
   opaque_type& operator+=(const opaque_type&) = delete;
   opaque_type& operator-=(const opaque_type&) = delete;
 
-  constexpr14 opaque_type& operator+=(const Distance& s)
+  constexpr14 opaque_type& operator+=(const Distance& s) &
     noexcept(noexcept( value += s.value )) {
                        value += s.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator-=(const Distance& s)
+  constexpr14 opaque_type& operator-=(const Distance& s) &
     noexcept(noexcept( value -= s.value )) {
                        value -= s.value;
     return downcast(); }
@@ -91,8 +91,8 @@ public:
   explicit position_typedef() = default;
   position_typedef(const position_typedef& ) = default;
   position_typedef(      position_typedef&&) = default;
-  position_typedef& operator=(const position_typedef& ) = default;
-  position_typedef& operator=(      position_typedef&&) = default;
+  position_typedef& operator=(const position_typedef& ) & = default;
+  position_typedef& operator=(      position_typedef&&) & = default;
 protected:
   ~position_typedef() = default;
   using base::downcast;

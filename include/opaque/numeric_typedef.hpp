@@ -75,89 +75,101 @@ public:
   typedef S shift_type;
   using base::value;
 
-  constexpr14 opaque_type& operator*=(const opaque_type& peer)
+  constexpr14 opaque_type& operator*=(const opaque_type& peer) &
     noexcept(noexcept( value *= peer.value )) {
                        value *= peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator/=(const opaque_type& peer)
+  constexpr14 opaque_type& operator/=(const opaque_type& peer) &
     noexcept(noexcept( value /= peer.value )) {
                        value /= peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator%=(const opaque_type& peer)
+  constexpr14 opaque_type& operator%=(const opaque_type& peer) &
     noexcept(noexcept( value %= peer.value )) {
                        value %= peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator+=(const opaque_type& peer)
+  constexpr14 opaque_type& operator+=(const opaque_type& peer) &
     noexcept(noexcept( value += peer.value )) {
                        value += peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator-=(const opaque_type& peer)
+  constexpr14 opaque_type& operator-=(const opaque_type& peer) &
     noexcept(noexcept( value -= peer.value )) {
                        value -= peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator<<=(const shift_type& count)
+  constexpr14 opaque_type& operator<<=(const shift_type& count) &
     noexcept(noexcept( value <<= count )) {
                        value <<= count;
     return downcast(); }
 
-  constexpr14 opaque_type& operator>>=(const shift_type& count)
+  constexpr14 opaque_type& operator>>=(const shift_type& count) &
     noexcept(noexcept( value >>= count )) {
                        value >>= count;
     return downcast(); }
 
-  constexpr14 opaque_type& operator&=(const opaque_type& peer)
+  constexpr14 opaque_type& operator&=(const opaque_type& peer) &
     noexcept(noexcept( value &= peer.value )) {
                        value &= peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator^=(const opaque_type& peer)
+  constexpr14 opaque_type& operator^=(const opaque_type& peer) &
     noexcept(noexcept( value ^= peer.value )) {
                        value ^= peer.value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator|=(const opaque_type& peer)
+  constexpr14 opaque_type& operator|=(const opaque_type& peer) &
     noexcept(noexcept( value |= peer.value )) {
                        value |= peer.value;
     return downcast(); }
 
 
-  constexpr14 opaque_type& operator++()
+  constexpr14 opaque_type& operator++() &
     noexcept(noexcept( ++value )) {
                        ++value;
     return downcast(); }
 
-  constexpr14 opaque_type& operator--()
+  constexpr14 opaque_type& operator--() &
     noexcept(noexcept( --value )) {
                        --value;
     return downcast(); }
 
-  constexpr14 opaque_type operator++(int) noexcept(noexcept(
+  constexpr14 opaque_type operator++(int) & noexcept(noexcept(
         std::declval<numeric_typedef_base&>().operator++()) and
         std::is_nothrow_constructible<opaque_type, underlying_type>::value) {
     opaque_type r(value); operator++(); return r; }
 
-  constexpr14 opaque_type operator--(int) noexcept(noexcept(
+  constexpr14 opaque_type operator--(int) & noexcept(noexcept(
         std::declval<numeric_typedef_base&>().operator++()) and
         std::is_nothrow_constructible<opaque_type, underlying_type>::value) {
     opaque_type r(value); operator--(); return r; }
 
 
-  constexpr opaque_type operator+() const
-    noexcept(noexcept( opaque_type(+value) )) {
-    return             opaque_type(+value); }
+  constexpr opaque_type operator+() const &
+    noexcept(noexcept( opaque_type(+          value ) )) {
+    return             opaque_type(+          value ); }
 
-  constexpr opaque_type operator-() const
-    noexcept(noexcept( opaque_type(-value) )) {
-    return             opaque_type(-value); }
+  constexpr opaque_type operator+()       &&
+    noexcept(noexcept( opaque_type(+std::move(value)) )) {
+    return             opaque_type(+std::move(value)); }
 
-  constexpr opaque_type operator~() const
-    noexcept(noexcept( opaque_type(~value) )) {
-    return             opaque_type(~value); }
+  constexpr opaque_type operator-() const &
+    noexcept(noexcept( opaque_type(-          value ) )) {
+    return             opaque_type(-          value ); }
+
+  constexpr opaque_type operator-()       &&
+    noexcept(noexcept( opaque_type(-std::move(value)) )) {
+    return             opaque_type(-std::move(value)); }
+
+  constexpr opaque_type operator~() const &
+    noexcept(noexcept( opaque_type(~          value ) )) {
+    return             opaque_type(~          value ); }
+
+  constexpr opaque_type operator~()       &&
+    noexcept(noexcept( opaque_type(~std::move(value)) )) {
+    return             opaque_type(~std::move(value)); }
 
   constexpr bool     operator!() const
     noexcept(noexcept( !value  )) {
@@ -192,8 +204,8 @@ public:
   explicit numeric_typedef_base() = default;
   numeric_typedef_base(const numeric_typedef_base& ) = default;
   numeric_typedef_base(      numeric_typedef_base&&) = default;
-  numeric_typedef_base& operator=(const numeric_typedef_base& ) = default;
-  numeric_typedef_base& operator=(      numeric_typedef_base&&) = default;
+  numeric_typedef_base& operator=(const numeric_typedef_base& ) & = default;
+  numeric_typedef_base& operator=(      numeric_typedef_base&&) & = default;
 protected:
   ~numeric_typedef_base() = default;
   using base::downcast;
@@ -235,8 +247,8 @@ struct numeric_typedef : numeric_typedef_base<U,O,S>
   explicit numeric_typedef() = default;
   numeric_typedef(const numeric_typedef& ) = default;
   numeric_typedef(      numeric_typedef&&) = default;
-  numeric_typedef& operator=(const numeric_typedef& ) = default;
-  numeric_typedef& operator=(      numeric_typedef&&) = default;
+  numeric_typedef& operator=(const numeric_typedef& ) & = default;
+  numeric_typedef& operator=(      numeric_typedef&&) & = default;
 protected:
   ~numeric_typedef() = default;
 };

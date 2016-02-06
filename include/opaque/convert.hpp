@@ -1,7 +1,7 @@
 #ifndef OPAQUE_CONVERT_HPP
 #define OPAQUE_CONVERT_HPP
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -226,29 +226,29 @@ struct converter<T, U&&, false> {
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(u))) {
-    return   static_cast<R>(u); }
+    noexcept(static_cast<R>(std::move(u)))) {
+    return   static_cast<R>(std::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(u.value))) {
-    return   static_cast<R>(u.value); }
+    noexcept(static_cast<R>(std::move(u.value)))) {
+    return   static_cast<R>(std::move(u.value)); }
 
   template <typename R=T>
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(u))) {
-    return   static_cast<R>(u); }
+    noexcept(static_cast<R>(std::move(u)))) {
+    return   static_cast<R>(std::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(u.value))) {
-    return   static_cast<R>(u.value); }
+    noexcept(static_cast<R>(std::move(u.value)))) {
+    return   static_cast<R>(std::move(u.value)); }
 
   template <typename R=unsigned>
   static constexpr
@@ -276,29 +276,29 @@ struct converter<T, U, false> { // same as U&&
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(u))) {
-    return   static_cast<R>(u); }
+    noexcept(static_cast<R>(std::move(u)))) {
+    return   static_cast<R>(std::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(u.value))) {
-    return   static_cast<R>(u.value); }
+    noexcept(static_cast<R>(std::move(u.value)))) {
+    return   static_cast<R>(std::move(u.value)); }
 
   template <typename R=T>
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(u))) {
-    return   static_cast<R>(u); }
+    noexcept(static_cast<R>(std::move(u)))) {
+    return   static_cast<R>(std::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(u.value))) {
-    return   static_cast<R>(u.value); }
+    noexcept(static_cast<R>(std::move(u.value)))) {
+    return   static_cast<R>(std::move(u.value)); }
 
   template <typename R=unsigned>
   static constexpr
