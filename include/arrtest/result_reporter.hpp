@@ -1,7 +1,7 @@
 #ifndef ARR_TEST_RESULT_REPORTER_HPP
 #define ARR_TEST_RESULT_REPORTER_HPP
 //
-// Copyright (c) 2013, 2015
+// Copyright (c) 2013, 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@
 #include "ostreamable.hpp"
 #include "type_name.hpp"
 #include <exception>
+#include <vector>
 #include <chrono>
 
 /// \file
@@ -44,14 +45,40 @@ namespace test {
 /// \addtogroup test
 /// @{
 
+using test_context = std::vector<source_point>;
+
+///
+/// Formatted output for source_point
+///
+inline std::ostream& operator<<(std::ostream& stream, const source_point& p) {
+  if (p.name) stream << p.name;
+  if (p.name and p.file) stream << " @ ";
+  if (p.file) stream << p.file;
+  if (p.line) stream << ':' << p.line;
+  return stream;
+}
+
 ///
 /// Formatted output for test_context
 ///
 inline std::ostream& operator<<(std::ostream& stream, const test_context& c) {
-  if (c.name) stream << c.name;
-  if (c.name and c.file) stream << " @ ";
-  if (c.file) stream << c.file;
-  if (c.line) stream << ':' << c.line;
+  struct manage_flags {
+    std::ostream& object;
+    std::ios_base::fmtflags orig;
+    manage_flags(std::ostream& s) : object(s), orig(
+        object.setf(std::ios_base::dec, std::ios_base::basefield)) { }
+    ~manage_flags() { object.flags(orig); }
+  } sentinel(stream);
+  if (c.size() > 1) {
+    stream << c.front().name << "; call stack:";
+    unsigned level = 0;
+    for (auto&& element : c) {
+      stream << "\n[" << level << "] " << element;
+      ++level;
+    }
+  } else {
+    stream << c.front();
+  }
   return stream;
 }
 

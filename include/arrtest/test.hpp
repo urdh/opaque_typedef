@@ -1,7 +1,7 @@
 #ifndef ARR_TEST_TEST_HPP
 #define ARR_TEST_TEST_HPP
 //
-// Copyright (c) 2013, 2014
+// Copyright (c) 2013, 2014, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -56,17 +56,18 @@ struct test {
   ///
   result_counter run(result_reporter& reporter) {
     result_counter counter;
-    test_context context{name, nullptr, 0u};
-    evaluator eval{reporter, counter, context};
+    test_context call_stack;
+    call_stack.emplace_back(name, nullptr, 0u);
+    evaluator eval{reporter, counter, call_stack};
     if (catch_unexpected) {
       try {
         run(eval);
       } catch (const std::exception& exception) {
         counter.inc_raised();
-        reporter.unexpected(context, exception);
+        reporter.unexpected(call_stack, exception);
       } catch (...) {
         counter.inc_raised();
-        reporter.unexpected(context, std::current_exception());
+        reporter.unexpected(call_stack, std::current_exception());
       }
     } else {
       run(eval);

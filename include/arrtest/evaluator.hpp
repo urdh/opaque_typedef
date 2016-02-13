@@ -1,7 +1,7 @@
 #ifndef ARR_TEST_EVALUATOR_HPP
 #define ARR_TEST_EVALUATOR_HPP
 //
-// Copyright (c) 2013
+// Copyright (c) 2013, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -62,9 +62,18 @@ struct evaluator {
     , _context(context)
     { }
 
-  /// Update the file_line execution context of the test
-  void operator()(file_line fl) noexcept {
-    static_cast<file_line&>(_context) = fl;
+  /// Update the context of the test
+  void operator()(source_point sp) noexcept {
+    if (1 == _context.size()) { // Don't replace test name
+      sp.name = _context.back().name;
+    }
+    _context.back() = sp;
+  }
+
+  /// Create a framer
+  framer<test_context> call_frame(source_point sp) {
+    operator()(sp);
+    return framer<test_context>(_context, sp);
   }
 
   /// Check whether the argument is true
@@ -198,7 +207,7 @@ private:
 /// CHECK(object.member_function());
 /// \endcode
 ///
-#define CHECK evaluator(FILE_LINE); evaluator.check
+#define CHECK evaluator(SOURCE_POINT); evaluator.check
 
 ///
 /// Check whether (expected, actual) arguments are equal using operator==
@@ -208,7 +217,7 @@ private:
 /// CHECK_EQUAL(15, object.member_function());
 /// \endcode
 ///
-#define CHECK_EQUAL evaluator(FILE_LINE); evaluator.equal
+#define CHECK_EQUAL evaluator(SOURCE_POINT); evaluator.equal
 
 ///
 /// Check whether a sequence of values are equal
@@ -221,7 +230,7 @@ private:
 /// CHECK_RANGE_EQUAL(expected.begin(), actual.begin(), expected.size())
 /// \endcode
 ///
-#define CHECK_RANGE_EQUAL evaluator(FILE_LINE); evaluator.range_equal
+#define CHECK_RANGE_EQUAL evaluator(SOURCE_POINT); evaluator.range_equal
 
 ///
 /// Check whether the arguments are close to equal using operator<
@@ -233,7 +242,7 @@ private:
 /// CHECK_CLOSE(15.0, object.member_function(), 0.01);
 /// \endcode
 ///
-#define CHECK_CLOSE evaluator(FILE_LINE); evaluator.close
+#define CHECK_CLOSE evaluator(SOURCE_POINT); evaluator.close
 
 ///
 /// Check whether (expected, actual) C-style strings have the same content
@@ -244,7 +253,7 @@ private:
 /// CHECK_STRINGS("Hello, world!", greeting);
 /// \endcode
 ///
-#define CHECK_STRINGS evaluator(FILE_LINE); evaluator.strings
+#define CHECK_STRINGS evaluator(SOURCE_POINT); evaluator.strings
 
 ///
 /// Check whether the elapsed time of the test is less than the given limit
@@ -254,7 +263,7 @@ private:
 /// CHECK_TIME(std::chrono::milliseconds{5});
 /// \endcode
 ///
-#define CHECK_TIME evaluator(FILE_LINE); evaluator.time
+#define CHECK_TIME evaluator(SOURCE_POINT); evaluator.time
 
 ///
 /// Check that an exception of the given type is thrown, and catch it
@@ -278,10 +287,25 @@ private:
 /// \endcode
 ///
 #define CHECK_CATCH(type_name, variable) \
-  evaluator(FILE_LINE); \
+  evaluator(SOURCE_POINT); \
   evaluator.unraised(#type_name); \
 } catch (type_name& variable) { \
   evaluator.raised(#type_name); \
+
+///
+/// Include stack trace for test subroutine
+///
+/// Exammple usage:
+/// \code
+/// void somefunc(arr::test::evaluator& evaluator) {
+///   CHECK(true);
+/// }
+/// TEST(foo) {
+///   TEST_CALL somefunc(evaluator);
+/// }
+/// \endcode
+///
+#define TEST_CALL evaluator.call_frame(SOURCE_POINT),
 
 /// @}
 

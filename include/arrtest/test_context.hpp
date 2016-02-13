@@ -1,7 +1,7 @@
 #ifndef ARR_TEST_TEST_CONTEXT_HPP
 #define ARR_TEST_TEST_CONTEXT_HPP
 //
-// Copyright (c) 2013
+// Copyright (c) 2013, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -38,40 +38,41 @@ namespace test {
 /// @{
 
 ///
-/// Container for file name and line number
+/// Source code point
 ///
-struct file_line {
+struct source_point {
 
-  constexpr file_line(
+  constexpr source_point(
+      const char * label,
       const char * file_name,
       unsigned line_number) noexcept
-    : file(file_name)
+    : name(label)
+    , file(file_name)
     , line(line_number)
   { }
 
+  const char * name;    ///< Label
   const char * file;    ///< Source file name
   unsigned     line;    ///< Source line number
 };
 
 ///
-/// Create a arr::test::file_line object using the current source code context
+/// Create a arr::test::source_point object using the current source point
 ///
-#define FILE_LINE arr::test::file_line{__FILE__, __LINE__}
+#define SOURCE_POINT arr::test::source_point{__func__, __FILE__, __LINE__}
 
 ///
-/// Container for test context
+/// Temporary object to maintain test call stack information
 ///
-struct test_context : file_line {
-
-  constexpr test_context(
-      const char * test_name,
-      const char * file_name,
-      unsigned line_number) noexcept
-    : file_line(file_name, line_number)
-    , name(test_name)
-  { }
-
-  const char * name;    ///< Test name
+template <typename Container>
+struct framer {
+  Container& stack;
+  bool valid = true;
+  framer(Container& c, const typename Container::value_type& v)
+    : stack(c) { stack.push_back(v); }
+  ~framer() { if (valid) stack.pop_back(); }
+  framer(const framer&) = delete;
+  framer(framer&& peer) : stack(peer.stack) { valid = false; }
 };
 
 /// @}

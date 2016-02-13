@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013
+// Copyright (c) 2013, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -67,4 +67,12 @@ TEST(emit_unprintable) {
   arr::test::emit_parameter(stream, std::common_type<int>());
   std::cout << stream.str() << std::endl;
   CHECK(std::string::npos != stream.str().find("(unprintable)"));
+}
+
+TEST(basechange) {
+  arr::test::test_context c;
+  c.emplace_back("foo", "bar", 16);
+  std::ostringstream stream;
+  stream << std::hex << c << "--" << 16;
+  CHECK_EQUAL("foo @ bar:16--10", stream.str());
 }

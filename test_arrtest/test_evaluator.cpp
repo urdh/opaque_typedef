@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013, 2015
+// Copyright (c) 2013, 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,25 +35,26 @@ UNIT_TEST_MAIN
 TEST(evaluator) {
   arr::test::result_reporter reporter(std::cout);
   arr::test::result_counter  counter;
-  arr::test::test_context    context{"FAKE", nullptr, 0u};
+  arr::test::test_context    context;
+  context.emplace_back("FAKE", nullptr, 0u);
   arr::test::evaluator       eval(reporter, counter, context);
-  eval(arr::test::file_line("hi", 42u));
-  CHECK_STRINGS("hi", context.file);
-  CHECK_EQUAL  (42u , context.line);
-  eval(FILE_LINE); eval.equal(false, false);
+  eval(arr::test::source_point("root", "hi", 42u));
+  CHECK_STRINGS("hi", context.back().file);
+  CHECK_EQUAL  (42u , context.back().line);
+  eval(SOURCE_POINT); eval.equal(false, false);
   CHECK_EQUAL(1u, counter.passed());
   CHECK_EQUAL(0u, counter.failed());
-  eval(FILE_LINE); eval.equal(false, true );
+  eval(SOURCE_POINT); eval.equal(false, true );
   CHECK_EQUAL(1u, counter.passed());
   CHECK_EQUAL(1u, counter.failed());
   const char greeting[] = "Hello, world!";
-  eval(FILE_LINE); eval.strings("Hello, world!", greeting);
+  eval(SOURCE_POINT); eval.strings("Hello, world!", greeting);
   CHECK_EQUAL(2u, counter.passed());
   CHECK_EQUAL(1u, counter.failed());
-  eval(FILE_LINE); eval.time(std::chrono::seconds{5});
+  eval(SOURCE_POINT); eval.time(std::chrono::seconds{5});
   CHECK_EQUAL(3u, counter.passed());
   CHECK_EQUAL(1u, counter.failed());
-  eval(FILE_LINE); eval.time(std::chrono::seconds{0});
+  eval(SOURCE_POINT); eval.time(std::chrono::seconds{0});
   CHECK_EQUAL(3u, counter.passed());
   CHECK_EQUAL(2u, counter.failed());
 
@@ -71,7 +72,7 @@ TEST(evaluator) {
   // Exception not raised
   try {
     // throw false;
-    eval(FILE_LINE);
+    eval(SOURCE_POINT);
     eval.unraised("bool");
   } catch (bool&) {
     eval.raised("bool");
@@ -86,30 +87,30 @@ TEST(evaluator) {
     CHECK_EQUAL(false, caught);
   }
 
-  eval(FILE_LINE); eval.check(true);
+  eval(SOURCE_POINT); eval.check(true);
   CHECK_EQUAL(5u, counter.passed());
   CHECK_EQUAL(3u, counter.failed());
-  eval(FILE_LINE); eval.check(nullptr);
+  eval(SOURCE_POINT); eval.check(nullptr);
   CHECK_EQUAL(5u, counter.passed());
   CHECK_EQUAL(4u, counter.failed());
 
-  eval(FILE_LINE); eval.close(10,  9, 2);
+  eval(SOURCE_POINT); eval.close(10,  9, 2);
   CHECK_EQUAL(6u, counter.passed());
   CHECK_EQUAL(4u, counter.failed());
-  eval(FILE_LINE); eval.close(10, 11, 2);
+  eval(SOURCE_POINT); eval.close(10, 11, 2);
   CHECK_EQUAL(7u, counter.passed());
   CHECK_EQUAL(4u, counter.failed());
-  eval(FILE_LINE); eval.close(10,  9, 1);
+  eval(SOURCE_POINT); eval.close(10,  9, 1);
   CHECK_EQUAL(7u, counter.passed());
   CHECK_EQUAL(5u, counter.failed());
-  eval(FILE_LINE); eval.close(10, 11, 1);
+  eval(SOURCE_POINT); eval.close(10, 11, 1);
   CHECK_EQUAL(7u, counter.passed());
   CHECK_EQUAL(6u, counter.failed());
 
   struct explicit_bool {
     explicit operator bool() const { return false; }
   };
-  eval(FILE_LINE); eval.check(explicit_bool());
+  eval(SOURCE_POINT); eval.check(explicit_bool());
   CHECK_EQUAL(7u, counter.passed());
   CHECK_EQUAL(7u, counter.failed());
 
@@ -119,4 +120,21 @@ struct foo { bool data = true; };
 
 TEST_FIXTURE(test_fixture, foo) {
   CHECK_EQUAL(true, data);
+}
+
+inline void barfunc(arr::test::evaluator& eval) {
+  eval(SOURCE_POINT); eval.check(false);
+}
+
+inline void foofunc(arr::test::evaluator& eval) {
+  eval.call_frame(SOURCE_POINT), barfunc(eval);
+}
+
+TEST(subroutines) {
+  arr::test::result_reporter reporter(std::cout);
+  arr::test::result_counter  counter;
+  arr::test::test_context    context;
+  context.emplace_back("FAKE", nullptr, 0u);
+  arr::test::evaluator       eval(reporter, counter, context);
+  eval.call_frame(SOURCE_POINT), foofunc(eval);
 }

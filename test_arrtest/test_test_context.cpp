@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013
+// Copyright (c) 2013, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,18 +28,55 @@
 //
 
 #include "arrtest/arrtest.hpp"
+#include <vector>
 
 UNIT_TEST_MAIN
 
-TEST(file_line) {
-  constexpr auto fl = arr::test::file_line("world", 42u);
-  CHECK_STRINGS("world", fl.file);
-  CHECK_EQUAL  (42u    , fl.line);
+TEST(source_point) {
+  constexpr auto sp = arr::test::source_point("hello", "world", 42u);
+  CHECK_STRINGS("hello", sp.name);
+  CHECK_STRINGS("world", sp.file);
+  CHECK_EQUAL  (42u    , sp.line);
 }
 
-TEST(test_context) {
-  constexpr auto tc = arr::test::test_context("hello", "world", 42u);
-  CHECK_STRINGS("hello", tc.name);
-  CHECK_STRINGS("world", tc.file);
-  CHECK_EQUAL  (42u    , tc.line);
+using stack_type = std::vector<int>;
+using framer_type = arr::test::framer<stack_type>;
+
+TEST(framer_statements) {
+  stack_type stack;
+  {
+    framer_type x(stack, 5);
+    CHECK_EQUAL(1u, stack.size());
+    CHECK_EQUAL( 5, stack.back());
+    {
+      framer_type y(stack, 6);
+      CHECK_EQUAL(2u, stack.size());
+      CHECK_EQUAL( 6, stack.back());
+    }
+    CHECK_EQUAL(1u, stack.size());
+    CHECK_EQUAL( 5, stack.back());
+  }
+  CHECK_EQUAL(0u, stack.size());
+}
+
+SUITE(framer_expressions) {
+
+stack_type stack;
+
+inline void func2(arr::test::evaluator& evaluator) {
+  CHECK_EQUAL(2u, stack.size());
+}
+
+inline void func1(arr::test::evaluator& evaluator) {
+  CHECK_EQUAL(1u, stack.size());
+  framer_type(stack, 6), func2(evaluator);
+  CHECK_EQUAL(1u, stack.size());
+}
+
+TEST(calls) {
+  CHECK_EQUAL(0u, stack.size());
+  framer_type(stack, 5), func1(evaluator);
+  CHECK_EQUAL(0u, stack.size());
+}
+
 }
