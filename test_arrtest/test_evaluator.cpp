@@ -122,13 +122,16 @@ TEST_FIXTURE(test_fixture, foo) {
   CHECK_EQUAL(true, data);
 }
 
-inline void barfunc(arr::test::evaluator& eval) {
-  eval(SOURCE_POINT); eval.check(false);
+inline void barfunc(arr::test::evaluator& evaluator) {
+  CHECK(false);
 }
 
-inline void foofunc(arr::test::evaluator& eval) {
-  eval.call_frame(SOURCE_POINT), barfunc(eval);
+inline void foofunc(arr::test::evaluator& evaluator) {
+  TEST_CALL barfunc(evaluator);
 }
+
+inline void void_func(arr::test::evaluator&) { return void(); }
+inline bool bool_func(arr::test::evaluator&) { return true; }
 
 TEST(subroutines) {
   arr::test::result_reporter reporter(std::cout);
@@ -136,5 +139,13 @@ TEST(subroutines) {
   arr::test::test_context    context;
   context.emplace_back("FAKE", nullptr, 0u);
   arr::test::evaluator       eval(reporter, counter, context);
-  eval.call_frame(SOURCE_POINT), foofunc(eval);
+  // void
+  eval.call_frame(SOURCE_POINT) ? throw 0 : foofunc(eval);
+  // not void
+  bool r = eval.call_frame(SOURCE_POINT) ? throw 0 : bool_func(eval);
+  CHECK_EQUAL(true, r);
+  // Actual usage of TEST_CALL
+  TEST_CALL void_func(evaluator);
+  bool R = TEST_CALL bool_func(evaluator);
+  CHECK_EQUAL(true, R);
 }

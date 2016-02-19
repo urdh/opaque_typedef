@@ -297,15 +297,20 @@ private:
 ///
 /// Exammple usage:
 /// \code
-/// void somefunc(arr::test::evaluator& evaluator) {
+/// void void_func(arr::test::evaluator& evaluator) {
 ///   CHECK(true);
 /// }
+/// bool bool_func(arr::test::evaluator& evaluator) {
+///   CHECK(true);
+///   return true;
+/// }
 /// TEST(foo) {
-///   TEST_CALL somefunc(evaluator);
+///   TEST_CALL void_func(evaluator);
+///   auto ret = TEST_CALL nonvoid_func(evaluator);
 /// }
 /// \endcode
 ///
-#define TEST_CALL evaluator.call_frame(SOURCE_POINT),
+#define TEST_CALL evaluator.call_frame(SOURCE_POINT) ? throw 0 :
 
 /// @}
 
