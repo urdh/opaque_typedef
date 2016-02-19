@@ -306,7 +306,7 @@ private:
 /// }
 /// TEST(foo) {
 ///   TEST_CALL void_func(evaluator);
-///   auto ret = TEST_CALL nonvoid_func(evaluator);
+///   bool ret = TEST_CALL bool_func(evaluator);
 /// }
 /// \endcode
 ///
