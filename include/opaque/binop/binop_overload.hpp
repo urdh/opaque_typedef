@@ -30,6 +30,7 @@
 //
 #include "../constexpr14.hpp"
 #include "../type_traits.hpp"
+#include "../utility.hpp"
 #include "../convert.hpp"
 #include <utility>
 
@@ -124,8 +125,10 @@ template <typename OP, typename RT,
 struct overload<OP,RT,true,P1,P2,I1,I2> {
   using overload_t = overload<OP,RT,false,P2,P1,I2,I1>;
   static constexpr RT func(P1&& p1, P2&& p2, OP op=OP{}) noexcept(noexcept(
-           overload_t::func(std::forward<P2>(p2), std::forward<P1>(p1), op))) {
-    return overload_t::func(std::forward<P2>(p2), std::forward<P1>(p1), op);
+           overload_t::func(
+             opaque::forward<P2>(p2), opaque::forward<P1>(p1), op))) {
+    return overload_t::func(
+        opaque::forward<P2>(p2), opaque::forward<P1>(p1), op);
   }
 };
 

@@ -29,6 +29,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 #include "type_traits.hpp"
+#include "utility.hpp"
 #include "data.hpp"
 #include <type_traits>
 #include <utility>
@@ -330,11 +331,11 @@ template <typename T, typename U=T>
 constexpr auto convert_mutable(U&& u)
   noexcept(noexcept(
 converter<typename std::decay<T>::type, U>::convert_mutable(
-  std::forward<U>(u)))) -> decltype(
+  opaque::forward<U>(u)))) -> decltype(
 converter<typename std::decay<T>::type, U>::convert_mutable(
-  std::forward<U>(u))) { return
+  opaque::forward<U>(u))) { return
 converter<typename std::decay<T>::type, U>::convert_mutable(
-  std::forward<U>(u));
+  opaque::forward<U>(u));
 }
 
 ///
@@ -347,11 +348,11 @@ template <typename T, typename U=T>
 constexpr auto convert(U&& u)
   noexcept(noexcept(
 converter<typename std::decay<T>::type, U>::convert(
-  std::forward<U>(u)))) -> decltype(
+  opaque::forward<U>(u)))) -> decltype(
 converter<typename std::decay<T>::type, U>::convert(
-  std::forward<U>(u))) { return
+  opaque::forward<U>(u))) { return
 converter<typename std::decay<T>::type, U>::convert(
-  std::forward<U>(u));
+  opaque::forward<U>(u));
 }
 
 template <typename T, typename U>
