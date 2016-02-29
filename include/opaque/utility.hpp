@@ -38,7 +38,7 @@ namespace opaque {
 
 #if __cplusplus >= 201402L
 using std::forward;
-using opaque::move;
+using std::move;
 #else
 template <typename T>
 constexpr T&& forward(typename std::remove_reference<T>::type&  t) noexcept {
