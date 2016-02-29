@@ -148,28 +148,28 @@ public:
 
 
   constexpr opaque_type operator+() const &
-    noexcept(noexcept( opaque_type(+          value ) )) {
-    return             opaque_type(+          value ); }
+    noexcept(noexcept( opaque_type(+             value ) )) {
+    return             opaque_type(+             value ); }
 
   constexpr opaque_type operator+()       &&
-    noexcept(noexcept( opaque_type(+std::move(value)) )) {
-    return             opaque_type(+std::move(value)); }
+    noexcept(noexcept( opaque_type(+opaque::move(value)) )) {
+    return             opaque_type(+opaque::move(value)); }
 
   constexpr opaque_type operator-() const &
-    noexcept(noexcept( opaque_type(-          value ) )) {
-    return             opaque_type(-          value ); }
+    noexcept(noexcept( opaque_type(-             value ) )) {
+    return             opaque_type(-             value ); }
 
   constexpr opaque_type operator-()       &&
-    noexcept(noexcept( opaque_type(-std::move(value)) )) {
-    return             opaque_type(-std::move(value)); }
+    noexcept(noexcept( opaque_type(-opaque::move(value)) )) {
+    return             opaque_type(-opaque::move(value)); }
 
   constexpr opaque_type operator~() const &
-    noexcept(noexcept( opaque_type(~          value ) )) {
-    return             opaque_type(~          value ); }
+    noexcept(noexcept( opaque_type(~             value ) )) {
+    return             opaque_type(~             value ); }
 
   constexpr opaque_type operator~()       &&
-    noexcept(noexcept( opaque_type(~std::move(value)) )) {
-    return             opaque_type(~std::move(value)); }
+    noexcept(noexcept( opaque_type(~opaque::move(value)) )) {
+    return             opaque_type(~opaque::move(value)); }
 
   constexpr bool     operator!() const
     noexcept(noexcept( !value  )) {

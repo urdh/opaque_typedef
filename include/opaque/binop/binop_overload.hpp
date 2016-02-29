@@ -32,7 +32,7 @@
 #include "../type_traits.hpp"
 #include "../utility.hpp"
 #include "../convert.hpp"
-#include <utility>
+#include <type_traits>
 
 namespace opaque {
 namespace binop {
@@ -56,9 +56,9 @@ struct overload<OP,RT,false,const P1& ,const P2& ,I1,I2> {
   typename std::enable_if<    std::is_same<RT,I1>::value, R>::type
   func(const P1&  p1, const P2&  p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
-      noexcept(op(std::declval<I1>(), convert<I2>(          p2 )))) {
+      noexcept(op(std::declval<I1>(), convert<I2>(p2)))) {
     I1 temp(p1);
-    op(temp, convert<I2>(          p2 ));
+    op(temp, convert<I2>(p2));
     return temp;
   }
   // Return type conversion
@@ -67,10 +67,10 @@ struct overload<OP,RT,false,const P1& ,const P2& ,I1,I2> {
   func(const P1&  p1, const P2&  p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
       std::is_nothrow_constructible<RT,I1&&>::value and
-      noexcept(op(std::declval<I1>(), convert<I2>(          p2 )))) {
+      noexcept(op(std::declval<I1>(), convert<I2>(p2)))) {
     I1 temp(p1);
-    op(temp, convert<I2>(          p2 ));
-    return static_cast<RT>(std::move(temp));
+    op(temp, convert<I2>(p2));
+    return static_cast<RT>(opaque::move(temp));
   }
 };
 
@@ -82,9 +82,9 @@ struct overload<OP,RT,false,const P1& ,      P2&&,I1,I2> {
   typename std::enable_if<    std::is_same<RT,I1>::value, R>::type
   func(const P1&  p1,       P2&& p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
-      noexcept(op(std::declval<I1>(), convert<I2>(std::move(p2))))) {
+      noexcept(op(std::declval<I1>(), convert<I2>(opaque::move(p2))))) {
     I1 temp(p1);
-    op(temp, convert<I2>(std::move(p2)));
+    op(temp, convert<I2>(opaque::move(p2)));
     return temp;
   }
   // Return type conversion
@@ -93,10 +93,10 @@ struct overload<OP,RT,false,const P1& ,      P2&&,I1,I2> {
   func(const P1&  p1,       P2&& p2, OP op=OP{}) noexcept(
       std::is_nothrow_constructible<I1,const P1&>::value and
       std::is_nothrow_constructible<RT,I1&&>::value and
-      noexcept(op(std::declval<I1>(), convert<I2>(std::move(p2))))) {
+      noexcept(op(std::declval<I1>(), convert<I2>(opaque::move(p2))))) {
     I1 temp(p1);
-    op(temp, convert<I2>(std::move(p2)));
-    return static_cast<RT>(std::move(temp));
+    op(temp, convert<I2>(opaque::move(p2)));
+    return static_cast<RT>(opaque::move(temp));
   }
 };
 
@@ -105,9 +105,11 @@ template <typename OP, typename RT,
 struct overload<OP,RT,false,      P1&&,const P2& ,I1,I2> {
   static constexpr RT func(      P1&& p1, const P2&  p2, OP op=OP{}) noexcept(
     noexcept(static_cast<RT>(
-        op(convert_mutable<I1>(std::move(p1)), convert<I2>(          p2 ))))) {
+        op(convert_mutable<I1>(opaque::move(p1)),
+           convert<I2>(                     p2 ))))) {
     return   static_cast<RT>(
-        op(convert_mutable<I1>(std::move(p1)), convert<I2>(          p2 ))); }
+        op(convert_mutable<I1>(opaque::move(p1)),
+           convert<I2>(                     p2 ))); }
 };
 
 template <typename OP, typename RT,
@@ -115,19 +117,21 @@ template <typename OP, typename RT,
 struct overload<OP,RT,false,      P1&&,      P2&&,I1,I2> {
   static constexpr RT func(      P1&& p1,       P2&& p2, OP op=OP{}) noexcept(
     noexcept(static_cast<RT>(
-        op(convert_mutable<I1>(std::move(p1)), convert<I2>(std::move(p2)))))) {
+        op(convert_mutable<I1>(opaque::move(p1)),
+           convert<I2>(        opaque::move(p2)))))) {
     return   static_cast<RT>(
-        op(convert_mutable<I1>(std::move(p1)), convert<I2>(std::move(p2)))); }
+        op(convert_mutable<I1>(opaque::move(p1)),
+           convert<I2>(        opaque::move(p2)))); }
 };
 
 template <typename OP, typename RT,
          typename P1, typename P2, typename I1, typename I2>
 struct overload<OP,RT,true,P1,P2,I1,I2> {
   using overload_t = overload<OP,RT,false,P2,P1,I2,I1>;
-  static constexpr RT func(P1&& p1, P2&& p2, OP op=OP{}) noexcept(noexcept(
-           overload_t::func(
-             opaque::forward<P2>(p2), opaque::forward<P1>(p1), op))) {
-    return overload_t::func(
+  static constexpr RT func(P1&& p1, P2&& p2, OP op=OP{}) noexcept(
+    noexcept(overload_t::func(
+        opaque::forward<P2>(p2), opaque::forward<P1>(p1), op))) {
+    return   overload_t::func(
         opaque::forward<P2>(p2), opaque::forward<P1>(p1), op);
   }
 };

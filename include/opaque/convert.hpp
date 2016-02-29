@@ -32,7 +32,6 @@
 #include "utility.hpp"
 #include "data.hpp"
 #include <type_traits>
-#include <utility>
 
 namespace opaque {
 
@@ -92,12 +91,12 @@ template <typename T, typename U>
 struct converter<T, U&&, true> {
 
   static constexpr             T&& convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<      T&&>(std::move(u)))) {
-    return   static_cast<      T&&>(std::move(u)); }
+    noexcept(static_cast<      T&&>(opaque::move(u)))) {
+    return   static_cast<      T&&>(opaque::move(u)); }
 
   static constexpr             T&& convert(              U&& u) noexcept(
-    noexcept(static_cast<      T&&>(std::move(u)))) {
-    return   static_cast<      T&&>(std::move(u)); }
+    noexcept(static_cast<      T&&>(opaque::move(u)))) {
+    return   static_cast<      T&&>(opaque::move(u)); }
 
   static constexpr unsigned mutable_cost() noexcept { return 0; }
   static constexpr unsigned         cost() noexcept { return 0; }
@@ -108,12 +107,12 @@ template <typename T, typename U>
 struct converter<T, U, true> { // same as U&&
 
   static constexpr             T&& convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<      T&&>(std::move(u)))) {
-    return   static_cast<      T&&>(std::move(u)); }
+    noexcept(static_cast<      T&&>(opaque::move(u)))) {
+    return   static_cast<      T&&>(opaque::move(u)); }
 
   static constexpr             T&& convert(              U&& u) noexcept(
-    noexcept(static_cast<      T&&>(std::move(u)))) {
-    return   static_cast<      T&&>(std::move(u)); }
+    noexcept(static_cast<      T&&>(opaque::move(u)))) {
+    return   static_cast<      T&&>(opaque::move(u)); }
 
   static constexpr unsigned mutable_cost() noexcept { return 0; }
   static constexpr unsigned         cost() noexcept { return 0; }
@@ -227,29 +226,29 @@ struct converter<T, U&&, false> {
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u)))) {
-    return   static_cast<R>(std::move(u)); }
+    noexcept(static_cast<R>(opaque::move(u)))) {
+    return   static_cast<R>(opaque::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u.value)))) {
-    return   static_cast<R>(std::move(u.value)); }
+    noexcept(static_cast<R>(opaque::move(u.value)))) {
+    return   static_cast<R>(opaque::move(u.value)); }
 
   template <typename R=T>
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u)))) {
-    return   static_cast<R>(std::move(u)); }
+    noexcept(static_cast<R>(opaque::move(u)))) {
+    return   static_cast<R>(opaque::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u.value)))) {
-    return   static_cast<R>(std::move(u.value)); }
+    noexcept(static_cast<R>(opaque::move(u.value)))) {
+    return   static_cast<R>(opaque::move(u.value)); }
 
   template <typename R=unsigned>
   static constexpr
@@ -277,29 +276,29 @@ struct converter<T, U, false> { // same as U&&
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u)))) {
-    return   static_cast<R>(std::move(u)); }
+    noexcept(static_cast<R>(opaque::move(u)))) {
+    return   static_cast<R>(opaque::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert_mutable(      U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u.value)))) {
-    return   static_cast<R>(std::move(u.value)); }
+    noexcept(static_cast<R>(opaque::move(u.value)))) {
+    return   static_cast<R>(opaque::move(u.value)); }
 
   template <typename R=T>
   static constexpr
   typename std::enable_if<not std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u)))) {
-    return   static_cast<R>(std::move(u)); }
+    noexcept(static_cast<R>(opaque::move(u)))) {
+    return   static_cast<R>(opaque::move(u)); }
 
   template <typename R=T&&>
   static constexpr
   typename std::enable_if<    std::is_base_of<data<T,U>, U>::value,
            R>::type                convert(              U&& u) noexcept(
-    noexcept(static_cast<R>(std::move(u.value)))) {
-    return   static_cast<R>(std::move(u.value)); }
+    noexcept(static_cast<R>(opaque::move(u.value)))) {
+    return   static_cast<R>(opaque::move(u.value)); }
 
   template <typename R=unsigned>
   static constexpr

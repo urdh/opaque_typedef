@@ -1,7 +1,7 @@
 #ifndef OPAQUE_BINOP_INHERIT_HPP
 #define OPAQUE_BINOP_INHERIT_HPP
 //
-// Copyright (c) 2015
+// Copyright (c) 2015, 2016
 // Kyle Markley.  All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
 //
 #include "binop_function.hpp"
 #include "binop_overload.hpp"
-#include <utility>
+#include "../utility.hpp"
 
 namespace opaque {
 namespace binop {
@@ -49,18 +49,18 @@ template <typename RT, bool commutative=true,
 struct multipliable {
   using OP = multiply_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator* (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator* (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator* (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator* (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator* (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator* (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator* (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator* (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=false,
@@ -68,18 +68,18 @@ template <typename RT, bool commutative=false,
 struct dividable {
   using OP = divide_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator/ (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator/ (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator/ (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator/ (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator/ (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator/ (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator/ (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator/ (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=false,
@@ -87,18 +87,18 @@ template <typename RT, bool commutative=false,
 struct modulable {
   using OP = modulus_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator% (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator% (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator% (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator% (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator% (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator% (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator% (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator% (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=true,
@@ -106,18 +106,18 @@ template <typename RT, bool commutative=true,
 struct addable {
   using OP = add_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator+ (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator+ (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator+ (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator+ (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator+ (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator+ (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator+ (      P1&&    p1, const P2&     p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator+ (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=false,
@@ -125,18 +125,18 @@ template <typename RT, bool commutative=false,
 struct subtractable {
   using OP = subtract_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator- (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator- (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator- (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator- (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator- (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator- (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator- (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator- (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=false,
@@ -144,18 +144,18 @@ template <typename RT, bool commutative=false,
 struct left_shiftable {
   using OP = left_shift_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator<<(const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator<<(const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator<<(      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator<<(      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator<<(const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator<<(const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator<<(      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator<<(      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=false,
@@ -163,18 +163,18 @@ template <typename RT, bool commutative=false,
 struct right_shiftable {
   using OP = right_shift_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator>>(const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator>>(const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator>>(      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator>>(      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator>>(const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator>>(const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator>>(      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator>>(      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=true,
@@ -182,18 +182,18 @@ template <typename RT, bool commutative=true,
 struct bitandable {
   using OP = bitand_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator& (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator& (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator& (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator& (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator& (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator& (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator& (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator& (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=true,
@@ -201,18 +201,18 @@ template <typename RT, bool commutative=true,
 struct bitxorable {
   using OP = bitxor_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator^ (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator^ (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator^ (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator^ (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator^ (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator^ (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator^ (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator^ (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 template <typename RT, bool commutative=true,
@@ -220,18 +220,18 @@ template <typename RT, bool commutative=true,
 struct bitorable {
   using OP = bitor_equal_t;
   using binop_t = binary_operator<OP, RT, commutative, P1, P2, I1, I2>;
-  friend constexpr RT operator| (const P1&  p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(          p1 ,           p2 ))) {
-             return binop_t::func(          p1 ,           p2 ); }
-  friend constexpr RT operator| (const P1&  p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(          p1 , std::move(p2)))) {
-             return binop_t::func(          p1 , std::move(p2)); }
-  friend constexpr RT operator| (      P1&& p1, const P2&  p2) noexcept(
-           noexcept(binop_t::func(std::move(p1),           p2 ))) {
-             return binop_t::func(std::move(p1),           p2 ); }
-  friend constexpr RT operator| (      P1&& p1,       P2&& p2) noexcept(
-           noexcept(binop_t::func(std::move(p1), std::move(p2)))) {
-             return binop_t::func(std::move(p1), std::move(p2)); }
+  friend constexpr RT operator| (const P1&     p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(             p1 ,              p2 ))) {
+             return binop_t::func(             p1 ,              p2 ); }
+  friend constexpr RT operator| (const P1&     p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(             p1 , opaque::move(p2)))) {
+             return binop_t::func(             p1 , opaque::move(p2)); }
+  friend constexpr RT operator| (      P1&&    p1 , const P2&    p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1),              p2 ))) {
+             return binop_t::func(opaque::move(p1),              p2 ); }
+  friend constexpr RT operator| (      P1&&    p1 ,       P2&&   p2 ) noexcept(
+           noexcept(binop_t::func(opaque::move(p1), opaque::move(p2)))) {
+             return binop_t::func(opaque::move(p1), opaque::move(p2)); }
 };
 
 /// @}

@@ -31,7 +31,6 @@
 #include "constexpr14.hpp"
 #include "utility.hpp"
 #include <type_traits>
-#include <utility>
 
 namespace opaque {
 
@@ -51,13 +50,13 @@ struct data {
   /// Copy the underlying value
   explicit constexpr operator underlying_type() const &
     noexcept(std::is_nothrow_copy_constructible<underlying_type>::value) {
-    return           value ;
+    return              value ;
   }
 
   /// Move the underlying value
   explicit constexpr operator underlying_type()       &&
     noexcept(std::is_nothrow_move_constructible<underlying_type>::value) {
-    return std::move(value);
+    return opaque::move(value);
   }
 
   /// Construct

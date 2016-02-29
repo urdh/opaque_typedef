@@ -30,7 +30,6 @@
 //
 #include "../utility.hpp"
 #include <type_traits>
-#include <utility>
 
 namespace opaque {
 namespace binop {
@@ -111,72 +110,72 @@ constexpr auto bitor_equal(T& l, const U& r)
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto multiply_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l *= r))) -> typename
-        std::decay<decltype(l *= r)>::type {
-           return std::move(l *= r); }
+noexcept(noexcept(opaque::move(l *= r))) -> typename
+           std::decay<decltype(l *= r)>::type {
+           return opaque::move(l *= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto divide_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l /= r))) -> typename
-        std::decay<decltype(l /= r)>::type {
-           return std::move(l /= r); }
+noexcept(noexcept(opaque::move(l /= r))) -> typename
+           std::decay<decltype(l /= r)>::type {
+           return opaque::move(l /= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto modulus_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l %= r))) -> typename
-        std::decay<decltype(l %= r)>::type {
-           return std::move(l %= r); }
+noexcept(noexcept(opaque::move(l %= r))) -> typename
+           std::decay<decltype(l %= r)>::type {
+           return opaque::move(l %= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto add_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l += r))) -> typename
-        std::decay<decltype(l += r)>::type {
-           return std::move(l += r); }
+noexcept(noexcept(opaque::move(l += r))) -> typename
+           std::decay<decltype(l += r)>::type {
+           return opaque::move(l += r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto subtract_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l -= r))) -> typename
-        std::decay<decltype(l -= r)>::type {
-           return std::move(l -= r); }
+noexcept(noexcept(opaque::move(l -= r))) -> typename
+           std::decay<decltype(l -= r)>::type {
+           return opaque::move(l -= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto left_shift_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l <<= r))) -> typename
-        std::decay<decltype(l <<= r)>::type {
-           return std::move(l <<= r); }
+noexcept(noexcept(opaque::move(l <<= r))) -> typename
+           std::decay<decltype(l <<= r)>::type {
+           return opaque::move(l <<= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto right_shift_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l >>= r))) -> typename
-        std::decay<decltype(l >>= r)>::type {
-           return std::move(l >>= r); }
+noexcept(noexcept(opaque::move(l >>= r))) -> typename
+           std::decay<decltype(l >>= r)>::type {
+           return opaque::move(l >>= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto bitand_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l &= r))) -> typename
-        std::decay<decltype(l &= r)>::type {
-           return std::move(l &= r); }
+noexcept(noexcept(opaque::move(l &= r))) -> typename
+           std::decay<decltype(l &= r)>::type {
+           return opaque::move(l &= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto bitxor_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l ^= r))) -> typename
-        std::decay<decltype(l ^= r)>::type {
-           return std::move(l ^= r); }
+noexcept(noexcept(opaque::move(l ^= r))) -> typename
+           std::decay<decltype(l ^= r)>::type {
+           return opaque::move(l ^= r); }
 
 template <typename T, typename U, typename = typename
   std::enable_if<not std::is_lvalue_reference<T>::value>::type>
 constexpr auto bitor_equal(T&& l, const U& r)
-noexcept(noexcept(std::move(l |= r))) -> typename
-        std::decay<decltype(l |= r)>::type {
-           return std::move(l |= r); }
+noexcept(noexcept(opaque::move(l |= r))) -> typename
+           std::decay<decltype(l |= r)>::type {
+           return opaque::move(l |= r); }
 
 //
 // Functor objects that forward to the appropriate function
