@@ -29,6 +29,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 #include "data.hpp"
+#include <functional>
 
 /// \addtogroup miscellaneous
 /// @{
@@ -41,7 +42,6 @@
 ///
 #define OPAQUE_HASHABLE(name) \
 namespace std {\
-  template <class T> struct hash;\
   template <> struct hash<name> {\
     using argument_type = typename name::opaque_type;\
     using result_type = size_t;\
