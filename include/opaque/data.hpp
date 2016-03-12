@@ -48,13 +48,13 @@ struct data {
   underlying_type value;
 
   /// Copy the underlying value
-  explicit constexpr operator underlying_type() const &
+  explicit constexpr   operator underlying_type() const &
     noexcept(std::is_nothrow_copy_constructible<underlying_type>::value) {
     return              value ;
   }
 
   /// Move the underlying value
-  explicit constexpr operator underlying_type()       &&
+  explicit constexpr14 operator underlying_type()       &&
     noexcept(std::is_nothrow_move_constructible<underlying_type>::value) {
     return opaque::move(value);
   }

@@ -308,6 +308,15 @@ SUITE(unary) {
     CHECK_EQUAL(e_return, a_return.value);
   }
 
+  TEST(plus_rvalue) {
+    bool a_noexcept = noexcept(+safe_int(10));
+    bool e_noexcept = noexcept(+     int(10));
+    auto a_return   =          +safe_int(10) ;
+    auto e_return   =          +     int(10) ;
+    CHECK_EQUAL(e_noexcept, a_noexcept);
+    CHECK_EQUAL(e_return, a_return.value);
+  }
+
   TEST(minus) {
     const safe_int a(10);
     const int      e(10);
@@ -320,6 +329,15 @@ SUITE(unary) {
     CHECK_EQUAL(e_return, a_return.value);
   }
 
+  TEST(minus_rvalue) {
+    bool a_noexcept = noexcept(-safe_int(10));
+    bool e_noexcept = noexcept(-     int(10));
+    auto a_return   =          -safe_int(10) ;
+    auto e_return   =          -     int(10) ;
+    CHECK_EQUAL(e_noexcept, a_noexcept);
+    CHECK_EQUAL(e_return, a_return.value);
+  }
+
   TEST(bitwise_not) {
     const safe_int a(10);
     const int      e(10);
@@ -328,6 +346,15 @@ SUITE(unary) {
     auto a_return   =          ~a ;
     auto e_return   =          ~e ;
     CHECK_EQUAL(e, a.value);
+    CHECK_EQUAL(e_noexcept, a_noexcept);
+    CHECK_EQUAL(e_return, a_return.value);
+  }
+
+  TEST(bitwise_not_rvalue) {
+    bool a_noexcept = noexcept(~safe_int(10));
+    bool e_noexcept = noexcept(~     int(10));
+    auto a_return   =          ~safe_int(10) ;
+    auto e_return   =          ~     int(10) ;
     CHECK_EQUAL(e_noexcept, a_noexcept);
     CHECK_EQUAL(e_return, a_return.value);
   }

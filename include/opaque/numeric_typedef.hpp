@@ -147,27 +147,27 @@ public:
     opaque_type r(value); operator--(); return r; }
 
 
-  constexpr opaque_type operator+() const &
+  constexpr   opaque_type operator+() const &
     noexcept(noexcept( opaque_type(+             value ) )) {
     return             opaque_type(+             value ); }
 
-  constexpr opaque_type operator+()       &&
+  constexpr14 opaque_type operator+()       &&
     noexcept(noexcept( opaque_type(+opaque::move(value)) )) {
     return             opaque_type(+opaque::move(value)); }
 
-  constexpr opaque_type operator-() const &
+  constexpr   opaque_type operator-() const &
     noexcept(noexcept( opaque_type(-             value ) )) {
     return             opaque_type(-             value ); }
 
-  constexpr opaque_type operator-()       &&
+  constexpr14 opaque_type operator-()       &&
     noexcept(noexcept( opaque_type(-opaque::move(value)) )) {
     return             opaque_type(-opaque::move(value)); }
 
-  constexpr opaque_type operator~() const &
+  constexpr   opaque_type operator~() const &
     noexcept(noexcept( opaque_type(~             value ) )) {
     return             opaque_type(~             value ); }
 
-  constexpr opaque_type operator~()       &&
+  constexpr14 opaque_type operator~()       &&
     noexcept(noexcept( opaque_type(~opaque::move(value)) )) {
     return             opaque_type(~opaque::move(value)); }
 
