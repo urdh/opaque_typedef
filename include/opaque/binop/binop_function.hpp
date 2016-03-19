@@ -178,88 +178,29 @@ noexcept(noexcept(opaque::move(l |= r))) -> typename
            return opaque::move(l |= r); }
 
 //
-// Functor objects that forward to the appropriate function
+// Functor objects that forward to the appropriate function.
+// Note that the function name is qualified to inhibit ADL.
 //
 
-struct multiply_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(multiply_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(multiply_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   multiply_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
+#define OPAQUE_BINOP_FORWARD(F) \
+template <typename T, typename U> \
+constexpr auto operator()(T&& l, U&& r) const noexcept( \
+  noexcept(opaque::binop::F(opaque::forward<T>(l), opaque::forward<U>(r)))) -> \
+  decltype(opaque::binop::F(opaque::forward<T>(l), opaque::forward<U>(r))) { \
+  return   opaque::binop::F(opaque::forward<T>(l), opaque::forward<U>(r)); } \
 
-struct divide_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(divide_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(divide_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   divide_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
+struct    multiply_equal_t { OPAQUE_BINOP_FORWARD(   multiply_equal) };
+struct      divide_equal_t { OPAQUE_BINOP_FORWARD(     divide_equal) };
+struct     modulus_equal_t { OPAQUE_BINOP_FORWARD(    modulus_equal) };
+struct         add_equal_t { OPAQUE_BINOP_FORWARD(        add_equal) };
+struct    subtract_equal_t { OPAQUE_BINOP_FORWARD(   subtract_equal) };
+struct  left_shift_equal_t { OPAQUE_BINOP_FORWARD( left_shift_equal) };
+struct right_shift_equal_t { OPAQUE_BINOP_FORWARD(right_shift_equal) };
+struct      bitand_equal_t { OPAQUE_BINOP_FORWARD(     bitand_equal) };
+struct      bitxor_equal_t { OPAQUE_BINOP_FORWARD(     bitxor_equal) };
+struct       bitor_equal_t { OPAQUE_BINOP_FORWARD(      bitor_equal) };
 
-struct modulus_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(modulus_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(modulus_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   modulus_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct add_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(add_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(add_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   add_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct subtract_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(subtract_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(subtract_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   subtract_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct left_shift_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(left_shift_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(left_shift_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   left_shift_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct right_shift_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(right_shift_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(right_shift_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   right_shift_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct bitand_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(bitand_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(bitand_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   bitand_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct bitxor_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(bitxor_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(bitxor_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   bitxor_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
-
-struct bitor_equal_t {
-  template <typename T, typename U>
-  constexpr auto operator()(T&& l, U&& r) const noexcept(
-    noexcept(bitor_equal(opaque::forward<T>(l), opaque::forward<U>(r)))) ->
-    decltype(bitor_equal(opaque::forward<T>(l), opaque::forward<U>(r))) {
-    return   bitor_equal(opaque::forward<T>(l), opaque::forward<U>(r)); }
-};
+#undef OPAQUE_BINOP_FORWARD
 
 /// @}
 
